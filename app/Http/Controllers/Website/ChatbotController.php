@@ -51,6 +51,14 @@ class ChatbotController
             $openAiKey = getenv('OPENAI_API_KEY') ?: '';
         }
 
+        // Hardcode check (untuk memastikan config terbaca)
+        if (empty($deepseekKey) && !empty($_ENV['DEEPSEEK_API_KEY'])) {
+            $deepseekKey = $_ENV['DEEPSEEK_API_KEY'];
+        }
+        if (empty($openAiKey) && !empty($_ENV['OPENAI_API_KEY'])) {
+            $openAiKey = $_ENV['OPENAI_API_KEY'];
+        }
+
         $provider = $deepseekKey !== '' ? 'deepseek' : 'openai';
         $apiKey = $provider === 'deepseek' ? $deepseekKey : $openAiKey;
 

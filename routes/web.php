@@ -28,20 +28,6 @@ require __DIR__ . '/auth.php';
 // =====================
 require __DIR__ . '/admin.php';
 
-// SEMENTARA: Route untuk menjalankan migrasi via browser
-// Hapus bagian ini setelah migrasi berhasil dijalankan!
-Route::get('/setup-db-migrasi-rahasia-123', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('migrate:fresh', [
-            '--seed' => true,
-            '--force' => true
-        ]);
-        return 'Migrasi & Seed BERHASIL! Database sudah siap. Silakan coba login admin.';
-    } catch (\Exception $e) {
-        return 'Migrasi GAGAL: ' . $e->getMessage();
-    }
-});
-
 // =====================
 // API ROUTES (OPTIONAL)
 // Uncomment jika menggunakan API
