@@ -197,8 +197,14 @@ class AppServiceProvider extends ServiceProvider
         if (app()->environment('local')) {
             $components = $buildMap();
         } else {
-            $cacheKey = "blade.components.map.{$module}";
-            $components = Cache::rememberForever($cacheKey, $buildMap);
+            try {
+                $cacheKey = "blade.components.map.{$module}";
+                $components = Cache::rememberForever($cacheKey, $buildMap);
+            } catch (\Exception $e) {
+                // Fallback: jika cache/database belum siap (misal saat build/deploy),
+                // jalankan buildMap secara langsung tanpa error.
+                $components = $buildMap();
+            }
         }
 
         foreach ($components as $tag => $viewPath) {
