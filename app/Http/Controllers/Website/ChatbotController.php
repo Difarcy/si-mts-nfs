@@ -35,6 +35,14 @@ class ChatbotController
         $deepseekKey = (string) config('services.deepseek.key', '');
         $openAiKey = (string) config('services.openai.key', '');
 
+        // Fallback untuk environment variable langsung
+        if (empty($deepseekKey)) {
+            $deepseekKey = env('DEEPSEEK_API_KEY', '');
+        }
+        if (empty($openAiKey)) {
+            $openAiKey = env('OPENAI_API_KEY', '');
+        }
+
         $provider = $deepseekKey !== '' ? 'deepseek' : 'openai';
         $apiKey = $provider === 'deepseek' ? $deepseekKey : $openAiKey;
 
