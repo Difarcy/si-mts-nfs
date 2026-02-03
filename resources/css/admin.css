@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+[x-cloak] {
+    display: none !important;
+}
+
+:root[data-admin-view-type="grid"] [data-admin-view-panel="table"] {
+    display: none !important;
+}
+
+:root[data-admin-view-type="table"] [data-admin-view-panel="grid"] {
+    display: none !important;
+}
