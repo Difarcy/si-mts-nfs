@@ -28,57 +28,66 @@ class AppServiceProvider extends ServiceProvider
 
         // View Composers for Website Widgets (with cache)
         view()->composer('website.components.content.*', function ($view) {
-            // Latest News (cached for 60 minutes)
-            $view->with('latestNewsWidget', Cache::remember('widget.latest_news', 3600, function () {
-                return \App\Models\Berita::where('status', 'publish')
-                    ->where(function ($query) {
-                        $query->whereNull('tanggal_publikasi')
-                            ->orWhere('tanggal_publikasi', '<=', now());
-                    })
-                    ->orderBy('tanggal_publikasi', 'desc')
-                    ->latest('id')
-                    ->take(5)
-                    ->get();
-            }));
+            try {
+                // Latest News (cached for 60 minutes)
+                $view->with('latestNewsWidget', Cache::remember('widget.latest_news', 3600, function () {
+                    return \App\Models\Berita::where('status', 'publish')
+                        ->where(function ($query) {
+                            $query->whereNull('tanggal_publikasi')
+                                ->orWhere('tanggal_publikasi', '<=', now());
+                        })
+                        ->orderBy('tanggal_publikasi', 'desc')
+                        ->latest('id')
+                        ->take(5)
+                        ->get();
+                }));
 
-            // Latest Articles (cached for 60 minutes)
-            $view->with('latestArticlesWidget', Cache::remember('widget.latest_articles', 3600, function () {
-                return \App\Models\Artikel::where('status', 'publish')
-                    ->where(function ($query) {
-                        $query->whereNull('tanggal_publikasi')
-                            ->orWhere('tanggal_publikasi', '<=', now());
-                    })
-                    ->orderBy('tanggal_publikasi', 'desc')
-                    ->latest('id')
-                    ->take(5)
-                    ->get();
-            }));
+                // Latest Articles (cached for 60 minutes)
+                $view->with('latestArticlesWidget', Cache::remember('widget.latest_articles', 3600, function () {
+                    return \App\Models\Artikel::where('status', 'publish')
+                        ->where(function ($query) {
+                            $query->whereNull('tanggal_publikasi')
+                                ->orWhere('tanggal_publikasi', '<=', now());
+                        })
+                        ->orderBy('tanggal_publikasi', 'desc')
+                        ->latest('id')
+                        ->take(5)
+                        ->get();
+                }));
 
-            // Latest Announcements (infoTerkini) (cached for 60 minutes)
-            $view->with('infoTerkiniWidget', Cache::remember('widget.latest_announcements', 3600, function () {
-                return \App\Models\Pengumuman::where('status', 'publish')
-                    ->where(function ($query) {
-                        $query->whereNull('tanggal_publikasi')
-                            ->orWhere('tanggal_publikasi', '<=', now());
-                    })
-                    ->orderBy('tanggal_publikasi', 'desc')
-                    ->latest('id')
-                    ->take(5)
-                    ->get();
-            }));
+                // Latest Announcements (infoTerkini) (cached for 60 minutes)
+                $view->with('infoTerkiniWidget', Cache::remember('widget.latest_announcements', 3600, function () {
+                    return \App\Models\Pengumuman::where('status', 'publish')
+                        ->where(function ($query) {
+                            $query->whereNull('tanggal_publikasi')
+                                ->orWhere('tanggal_publikasi', '<=', now());
+                        })
+                        ->orderBy('tanggal_publikasi', 'desc')
+                        ->latest('id')
+                        ->take(5)
+                        ->get();
+                }));
 
-            // Latest Agendas (agendaTerbaru) (cached for 60 minutes)
-            $view->with('agendaTerbaruWidget', Cache::remember('widget.latest_agendas', 3600, function () {
-                return \App\Models\Agenda::where('status', 'publish')
-                    ->where(function ($query) {
-                        $query->whereNull('tanggal_publikasi')
-                            ->orWhere('tanggal_publikasi', '<=', now());
-                    })
-                    ->orderBy('tanggal_publikasi', 'desc')
-                    ->latest('id')
-                    ->take(5)
-                    ->get();
-            }));
+                // Latest Agendas (agendaTerbaru) (cached for 60 minutes)
+                $view->with('agendaTerbaruWidget', Cache::remember('widget.latest_agendas', 3600, function () {
+                    return \App\Models\Agenda::where('status', 'publish')
+                        ->where(function ($query) {
+                            $query->whereNull('tanggal_publikasi')
+                                ->orWhere('tanggal_publikasi', '<=', now());
+                        })
+                        ->orderBy('tanggal_publikasi', 'desc')
+                        ->latest('id')
+                        ->take(5)
+                        ->get();
+                }));
+            } catch (\Exception $e) {
+                // Fail-safe: jika database belum siap, return collection kosong
+                Log::error('Widget View Composer Error: ' . $e->getMessage());
+                $view->with('latestNewsWidget', collect());
+                $view->with('latestArticlesWidget', collect());
+                $view->with('infoTerkiniWidget', collect());
+                $view->with('agendaTerbaruWidget', collect());
+            }
         });
 
         // Global Logo (cached for 60 minutes)
