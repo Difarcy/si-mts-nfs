@@ -21,12 +21,19 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+        try {
+            if (Auth::attempt($credentials)) {
+                $request->session()->regenerate();
 
-            // Redirect to admin dashboard
-            $request->session()->forget('url.intended');
-            return redirect()->route('admin.dashboard')->with('success', 'Login berhasil.');
+                // Redirect to admin dashboard
+                $request->session()->forget('url.intended');
+                return redirect()->route('admin.dashboard')->with('success', 'Login berhasil.');
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Login Error: ' . $e->getMessage());
+            return back()->withErrors([
+                'username' => 'Terjadi kesalahan sistem saat login. Silakan coba lagi.',
+            ])->onlyInput('username');
         }
 
         return back()->withErrors([

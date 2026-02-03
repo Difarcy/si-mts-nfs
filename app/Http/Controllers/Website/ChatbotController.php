@@ -43,10 +43,21 @@ class ChatbotController
             $openAiKey = env('OPENAI_API_KEY', '');
         }
 
+        // Paksa baca env jika masih kosong (debug mode)
+        if (empty($deepseekKey)) {
+            $deepseekKey = getenv('DEEPSEEK_API_KEY') ?: '';
+        }
+        if (empty($openAiKey)) {
+            $openAiKey = getenv('OPENAI_API_KEY') ?: '';
+        }
+
         $provider = $deepseekKey !== '' ? 'deepseek' : 'openai';
         $apiKey = $provider === 'deepseek' ? $deepseekKey : $openAiKey;
 
         if ($apiKey === '') {
+            // Log untuk debug di server (opsional, bisa dihapus nanti)
+            // \Illuminate\Support\Facades\Log::error('Chatbot AI Key Missing. Deepseek: ' . ($deepseekKey ? 'SET' : 'EMPTY') . ', OpenAI: ' . ($openAiKey ? 'SET' : 'EMPTY'));
+            
             return response()->json([
                 'reply' => 'Maaf, fitur AI untuk Nafa belum diaktifkan. Silakan konfigurasi DEEPSEEK_API_KEY atau OPENAI_API_KEY terlebih dahulu.',
             ], 503);
