@@ -52,6 +52,8 @@
     <!-- Footer -->
     @include('website.components.layout.footer')
 
+    <x-website.components.chatbot.chatbot />
+
     <x-website.components.ui.preview-image />
     <x-website.components.ui.notifications />
 

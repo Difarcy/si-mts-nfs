@@ -11,6 +11,7 @@ use App\Models\Berita;
 use App\Models\Artikel;
 use App\Models\Photo;
 use App\Http\Controllers\Website\KomentarController;
+use App\Http\Controllers\Website\ChatbotController;
 
 // Homepage
 Route::get('/', function () {
@@ -623,3 +624,7 @@ Route::post('/komentar/{type}/{id}', [KomentarController::class, 'store'])
 Route::post('/komentar/{id}/like', [KomentarController::class, 'like'])
     ->whereNumber('id')
     ->name('web.komentar.like');
+
+Route::post('/chatbot', [ChatbotController::class, 'send'])
+    ->middleware('throttle:30,1')
+    ->name('web.chatbot.send');

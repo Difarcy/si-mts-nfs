@@ -18,7 +18,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-2 space-y-5">
                         <x-admin.form.input name="nama" label="Nama" :value="old('nama', $greeting?->nama)" placeholder="Nama Kepala Madrasah" />
-                        <x-admin.form.textarea name="sambutan" label="Sambutan" placeholder="Tulis sambutan kepala madrasah" rows="10">{{ old('sambutan', $greeting?->sambutan) }}</x-admin.form.textarea>
+                        <x-admin.form.textarea name="sambutan" label="Sambutan" placeholder="Tulis sambutan kepala madrasah" rows="16" class="min-h-[400px]">{{ old('sambutan', $greeting?->sambutan) }}</x-admin.form.textarea>
                     </div>
 
                     <div class="lg:col-span-1 space-y-5">

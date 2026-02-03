@@ -15,6 +15,7 @@ import initCalendarWidget from './website/ui/calendar-widget';
 import { initToast as initWebsiteToast } from './website/ui/notifications';
 import { initContactForm } from './website/modules/contact';
 import { initCommentForms } from './website/modules/comments';
+import { initChatbot } from './website/modules/chatbot';
 
 // Initialize UI components
 document.addEventListener('DOMContentLoaded', () => {
@@ -25,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initPreviewImageModal();
     initVideoPreview();
     initCalendarWidget();
+    initChatbot();
     
     // Initialize Modules based on page data attribute
     if (document.querySelector('[data-page="contact"]')) {

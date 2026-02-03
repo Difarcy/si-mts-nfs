@@ -13,6 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(prepend: [\App\Http\Middleware\AdminRequestProfiler::class]);
 
+        $middleware->validateCsrfTokens(except: [
+            'chatbot',
+        ]);
+
         $middleware->alias([
             'admin.idle' => \App\Http\Middleware\AdminIdleTimeout::class,
         ]);
