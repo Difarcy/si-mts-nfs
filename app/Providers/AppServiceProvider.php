@@ -93,6 +93,13 @@ class AppServiceProvider extends ServiceProvider
         // Global Logo (cached for 60 minutes)
         view()->composer('*', function ($view) {
             try {
+                if (app()->runningInConsole()) {
+                     $view->with('websiteLogo', url('images/logo/logo.png'));
+                     $view->with('mediaSosial', null);
+                     $view->with('socialLinks', []);
+                     return;
+                }
+                
                 $logoData = Cache::remember('global.logo', 3600, function () {
                     $logo = \App\Models\Logo::first();
                     $logoUrl = url('images/logo/logo.png'); // default
@@ -139,7 +146,7 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('socialLinks', $socialData['socialLinks']);
             } catch (\Exception $e) {
                 // Fail-safe: jika terjadi error apapun, gunakan logo default
-                Log::error('Logo View Composer Error: ' . $e->getMessage());
+                // Log::error('Logo View Composer Error: ' . $e->getMessage()); // Suppress log agar tidak spam saat build
                 $view->with('websiteLogo', url('images/logo/logo.png'));
                 $view->with('mediaSosial', null);
                 $view->with('socialLinks', [
