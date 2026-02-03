@@ -15,115 +15,133 @@ use App\Http\Controllers\Website\ChatbotController;
 
 // Homepage
 Route::get('/', function () {
-    // Hero Section Data
-    $hero = \App\Models\Hero::first();
+    try {
+        // Hero Section Data
+        $hero = \App\Models\Hero::first();
 
-    // Widget Kepala Madrasah (Sidebar)
-    $kepalaMadrasah = \App\Models\KepalaMadrasah::query()->orderBy('id')->first();
+        // Widget Kepala Madrasah (Sidebar)
+        $kepalaMadrasah = \App\Models\KepalaMadrasah::query()->orderBy('id')->first();
 
-    // Banner Promosi
-    $bannerPromosi = \App\Models\BannerPromosi::first();
-    $promosiBannerPath = $bannerPromosi ? $bannerPromosi->path : null;
+        // Banner Promosi
+        $bannerPromosi = \App\Models\BannerPromosi::first();
+        $promosiBannerPath = $bannerPromosi ? $bannerPromosi->path : null;
 
-    // Banner Slide
-    $banners = \App\Models\Banner::where('is_active', true)
-        ->orderBy('urutan', 'asc')
-        ->get();
+        // Banner Slide
+        $banners = \App\Models\Banner::where('is_active', true)
+            ->orderBy('urutan', 'asc')
+            ->get();
 
-    // Berita Highlight (yang dicentang "Jadikan Highlight")
-    $highlightNews = \App\Models\Berita::where('status', 'publish')
-        ->where('is_highlight', true)
-        ->where(function ($query) {
-            $query->whereNull('tanggal_publikasi')
-                ->orWhere('tanggal_publikasi', '<=', now());
-        })
-        ->orderBy('tanggal_publikasi', 'desc')
-        ->latest('id')
-        ->take(5)
-        ->get();
+        // Berita Highlight (yang dicentang "Jadikan Highlight")
+        $highlightNews = \App\Models\Berita::where('status', 'publish')
+            ->where('is_highlight', true)
+            ->where(function ($query) {
+                $query->whereNull('tanggal_publikasi')
+                    ->orWhere('tanggal_publikasi', '<=', now());
+            })
+            ->orderBy('tanggal_publikasi', 'desc')
+            ->latest('id')
+            ->take(5)
+            ->get();
 
-    // Berita Terbaru untuk section lain
-    $latestNews = \App\Models\Berita::where('status', 'publish')
-        ->where(function ($query) {
-            $query->whereNull('tanggal_publikasi')
-                ->orWhere('tanggal_publikasi', '<=', now());
-        })
-        ->orderBy('tanggal_publikasi', 'desc')
-        ->latest('id')
-        ->take(4)
-        ->get();
+        // Berita Terbaru untuk section lain
+        $latestNews = \App\Models\Berita::where('status', 'publish')
+            ->where(function ($query) {
+                $query->whereNull('tanggal_publikasi')
+                    ->orWhere('tanggal_publikasi', '<=', now());
+            })
+            ->orderBy('tanggal_publikasi', 'desc')
+            ->latest('id')
+            ->take(4)
+            ->get();
 
-    // Artikel Terbaru untuk section Latest Articles
-    $latestArticles = \App\Models\Artikel::where('status', 'publish')
-        ->where(function ($query) {
-            $query->whereNull('tanggal_publikasi')
-                ->orWhere('tanggal_publikasi', '<=', now());
-        })
-        ->orderBy('tanggal_publikasi', 'desc')
-        ->latest('id')
-        ->take(4)
-        ->get();
+        // Artikel Terbaru untuk section Latest Articles
+        $latestArticles = \App\Models\Artikel::where('status', 'publish')
+            ->where(function ($query) {
+                $query->whereNull('tanggal_publikasi')
+                    ->orWhere('tanggal_publikasi', '<=', now());
+            })
+            ->orderBy('tanggal_publikasi', 'desc')
+            ->latest('id')
+            ->take(4)
+            ->get();
 
-    // Prestasi Siswa Terbaru
-    $prestasiSiswa = \App\Models\PrestasiSiswa::where('status', 'publish')
-        ->orderBy('tanggal', 'desc')
-        ->take(4)
-        ->get();
+        // Prestasi Siswa Terbaru
+        $prestasiSiswa = \App\Models\PrestasiSiswa::where('status', 'publish')
+            ->orderBy('tanggal', 'desc')
+            ->take(4)
+            ->get();
 
-    // Foto Kegiatan Terbaru (12 foto untuk 2 baris scrolling)
-    $fotoKegiatan = \App\Models\Photo::orderBy('tanggal_publikasi', 'desc')->take(12)->get();
+        // Foto Kegiatan Terbaru (12 foto untuk 2 baris scrolling)
+        $fotoKegiatan = \App\Models\Photo::orderBy('tanggal_publikasi', 'desc')->take(12)->get();
 
-    // Video Kegiatan Terbaru
-    $videoKegiatan = \App\Models\Video::where('status', 'publish')
-        ->where(function ($query) {
-            $query->whereNull('tanggal_publikasi')
-                ->orWhere('tanggal_publikasi', '<=', now());
-        })
-        ->orderBy('tanggal_publikasi', 'desc')
-        ->latest('id')
-        ->take(6)
-        ->get();
+        // Video Kegiatan Terbaru
+        $videoKegiatan = \App\Models\Video::where('status', 'publish')
+            ->where(function ($query) {
+                $query->whereNull('tanggal_publikasi')
+                    ->orWhere('tanggal_publikasi', '<=', now());
+            })
+            ->orderBy('tanggal_publikasi', 'desc')
+            ->latest('id')
+            ->take(6)
+            ->get();
 
-    // Ticker Items (2 Berita, 1 Artikel, 1 Pengumuman, 1 Agenda)
-    $tickerNews = \App\Models\Berita::where('status', 'publish')
-        ->where(function ($query) {
-            $query->whereNull('tanggal_publikasi')->orWhere('tanggal_publikasi', '<=', now());
-        })
-        ->latest('tanggal_publikasi')
-        ->take(2)
-        ->get()
-        ->map(fn($item) => $item->judul);
+        // Ticker Items (2 Berita, 1 Artikel, 1 Pengumuman, 1 Agenda)
+        $tickerNews = \App\Models\Berita::where('status', 'publish')
+            ->where(function ($query) {
+                $query->whereNull('tanggal_publikasi')->orWhere('tanggal_publikasi', '<=', now());
+            })
+            ->latest('tanggal_publikasi')
+            ->take(2)
+            ->get()
+            ->map(fn($item) => $item->judul);
 
-    $tickerArticles = \App\Models\Artikel::where('status', 'publish')
-        ->where(function ($query) {
-            $query->whereNull('tanggal_publikasi')->orWhere('tanggal_publikasi', '<=', now());
-        })
-        ->latest('tanggal_publikasi')
-        ->take(1)
-        ->get()
-        ->map(fn($item) => $item->judul);
+        $tickerArticles = \App\Models\Artikel::where('status', 'publish')
+            ->where(function ($query) {
+                $query->whereNull('tanggal_publikasi')->orWhere('tanggal_publikasi', '<=', now());
+            })
+            ->latest('tanggal_publikasi')
+            ->take(1)
+            ->get()
+            ->map(fn($item) => $item->judul);
 
-    $tickerAnnouncements = \App\Models\Pengumuman::where('status', 'publish')
-        ->where(function ($query) {
-            $query->whereNull('tanggal_publikasi')->orWhere('tanggal_publikasi', '<=', now());
-        })
-        ->latest('tanggal_publikasi')
-        ->take(1)
-        ->get()
-        ->map(fn($item) => $item->judul);
+        $tickerAnnouncements = \App\Models\Pengumuman::where('status', 'publish')
+            ->where(function ($query) {
+                $query->whereNull('tanggal_publikasi')->orWhere('tanggal_publikasi', '<=', now());
+            })
+            ->latest('tanggal_publikasi')
+            ->take(1)
+            ->get()
+            ->map(fn($item) => $item->judul);
 
-    $tickerAgendas = \App\Models\Agenda::where('status', 'publish')
-        ->where(function ($query) {
-            $query->whereNull('tanggal_publikasi')->orWhere('tanggal_publikasi', '<=', now());
-        })
-        ->latest('tanggal_publikasi')
-        ->take(1)
-        ->get()
-        ->map(fn($item) => $item->judul);
+        $tickerAgendas = \App\Models\Agenda::where('status', 'publish')
+            ->where(function ($query) {
+                $query->whereNull('tanggal_publikasi')->orWhere('tanggal_publikasi', '<=', now());
+            })
+            ->latest('tanggal_publikasi')
+            ->take(1)
+            ->get()
+            ->map(fn($item) => $item->judul);
 
-    $tickerItems = $tickerNews->concat($tickerArticles)->concat($tickerAnnouncements)->concat($tickerAgendas);
+        $tickerItems = $tickerNews->concat($tickerArticles)->concat($tickerAnnouncements)->concat($tickerAgendas);
 
-    return view('website.pages.home.index', compact('hero', 'kepalaMadrasah', 'promosiBannerPath', 'banners', 'latestNews', 'highlightNews', 'latestArticles', 'fotoKegiatan', 'videoKegiatan', 'prestasiSiswa', 'tickerItems'));
+        return view('website.pages.home.index', compact('hero', 'kepalaMadrasah', 'promosiBannerPath', 'banners', 'latestNews', 'highlightNews', 'latestArticles', 'fotoKegiatan', 'videoKegiatan', 'prestasiSiswa', 'tickerItems'));
+    } catch (\Exception $e) {
+        // Fallback jika database belum siap (misal saat fresh deploy sebelum migrate)
+        // Log::error('Homepage Error: ' . $e->getMessage());
+        return view('website.pages.home.index', [
+            'hero' => null,
+            'kepalaMadrasah' => null,
+            'promosiBannerPath' => null,
+            'banners' => collect(),
+            'latestNews' => collect(),
+            'highlightNews' => collect(),
+            'latestArticles' => collect(),
+            'fotoKegiatan' => collect(),
+            'videoKegiatan' => collect(),
+            'prestasiSiswa' => collect(),
+            'tickerItems' => collect(),
+        ]);
+    }
 })->name('web.home');
 
 // Halaman Profil
