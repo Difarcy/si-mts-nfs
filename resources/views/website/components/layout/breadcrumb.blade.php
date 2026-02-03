@@ -1,6 +1,7 @@
 @props(['items' => []])
 <nav aria-label="Breadcrumb" class="mb-2">
-    <ol class="flex flex-wrap items-center gap-1 text-[9px] sm:text-[12px] text-black uppercase tracking-tight">
+    <ol
+        class="flex flex-nowrap items-center gap-1 text-[9px] sm:text-[12px] text-black uppercase tracking-tight overflow-x-auto">
         {{-- Home link always present --}}
         <li>
             <a href="{{ route('web.home') }}" class="hover:text-green-700 transition-colors font-medium">BERANDA</a>
@@ -18,12 +19,13 @@
         @foreach($items as $i => $item)
         @php($isLast = $i === count($items) - 1)
         @if(!empty($item['url']) && !$isLast)
-            <li>
+            <li class="truncate max-w-[120px] sm:max-w-[200px] md:max-w-[250px]">
                 <a href="{{ $item['url'] }}"
                     class="hover:text-green-700 transition-colors font-medium">{{ $item['label'] }}</a>
             </li>
         @else
-            <li class="{{ $isLast ? 'font-bold' : 'font-medium' }} truncate max-w-[120px] sm:max-w-none">
+            <li
+                class="{{ $isLast ? 'font-bold' : 'font-medium' }} truncate max-w-[120px] sm:max-w-[200px] md:max-w-[250px]">
                 {{ $item['label'] }}
             </li>
         @endif
