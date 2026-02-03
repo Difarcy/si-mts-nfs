@@ -28,6 +28,11 @@ class AppServiceProvider extends ServiceProvider
 
         // View Composers for Website Widgets (with cache)
         view()->composer('website.components.content.*', function ($view) {
+            // Skip jika berjalan di console (build process)
+            if (app()->runningInConsole()) {
+                return;
+            }
+
             try {
                 // Latest News (cached for 60 minutes)
                 $view->with('latestNewsWidget', Cache::remember('widget.latest_news', 3600, function () {
@@ -82,7 +87,7 @@ class AppServiceProvider extends ServiceProvider
                 }));
             } catch (\Exception $e) {
                 // Fail-safe: jika database belum siap, return collection kosong
-                Log::error('Widget View Composer Error: ' . $e->getMessage());
+                // Log::error('Widget View Composer Error: ' . $e->getMessage());
                 $view->with('latestNewsWidget', collect());
                 $view->with('latestArticlesWidget', collect());
                 $view->with('infoTerkiniWidget', collect());
@@ -167,13 +172,18 @@ class AppServiceProvider extends ServiceProvider
             'website.pages.contact.index',
             'website.pages.spmb.*',
         ], function ($view) {
+            // Skip jika berjalan di console (build process)
+            if (app()->runningInConsole()) {
+                return;
+            }
+
             try {
                 $kontak = Cache::remember('global.kontak', 3600, function () {
                     return \App\Models\Kontak::first();
                 });
                 $view->with('kontak', $kontak);
             } catch (\Exception $e) {
-                Log::error('Kontak View Composer Error: ' . $e->getMessage());
+                // Log::error('Kontak View Composer Error: ' . $e->getMessage());
                 $view->with('kontak', null);
             }
         });
