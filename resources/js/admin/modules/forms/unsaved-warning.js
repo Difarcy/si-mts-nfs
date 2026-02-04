@@ -128,7 +128,10 @@ export function initUnsavedChangesWarning() {
             // Jadi sistem akan menganggap form ini "Dirty" sejak awal load.
             form.__unsavedInitialSnapshot = 'force_dirty_state_due_to_error';
         } else {
-            form.__unsavedInitialSnapshot = getFormSnapshot(form);
+            // Delay taking the initial snapshot to allow other scripts/plugins to settle
+            setTimeout(() => {
+                form.__unsavedInitialSnapshot = getFormSnapshot(form);
+            }, 500);
         }
 
         const scheduleUpdate = () => {
