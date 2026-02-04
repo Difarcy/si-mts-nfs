@@ -73,38 +73,66 @@ class KomentarController extends Controller
     {
         try {
             $comment = Komentar::findOrFail($id);
-            $sessionId = $request->session()->getId();
-            $ip = $request->ip();
-            $userAgent = $request->userAgent();
-
-            // Unique identifier for device: Session ID + IP + User Agent
-            $deviceIdentifier = hash('sha256', $sessionId . $ip . $userAgent);
-
-            // Check if this device already liked this comment
-            $existingLike = \Illuminate\Support\Facades\DB::table('komentar_like_publik')
-                ->where('komentar_id', $id)
-                ->where('device_id', $deviceIdentifier)
-                ->first();
-
             $liked = false;
-            if ($existingLike) {
-                // Unlike
-                \Illuminate\Support\Facades\DB::table('komentar_like_publik')
-                    ->where('id', $existingLike->id)
-                    ->delete();
-                $liked = false;
+
+            if (\Illuminate\Support\Facades\Auth::check()) {
+                // --- ADMIN LOGIC ---
+                $userId = \Illuminate\Support\Facades\Auth::id();
+                
+                $existingLike = \Illuminate\Support\Facades\DB::table('komentar_like')
+                    ->where('komentar_id', $id)
+                    ->where('user_id', $userId)
+                    ->first();
+
+                if ($existingLike) {
+                    // Unlike
+                    \Illuminate\Support\Facades\DB::table('komentar_like')
+                        ->where('id', $existingLike->id)
+                        ->delete();
+                    $liked = false;
+                } else {
+                    // Like
+                    \Illuminate\Support\Facades\DB::table('komentar_like')->insert([
+                        'komentar_id' => $id,
+                        'user_id' => $userId,
+                    ]);
+                    $liked = true;
+                }
             } else {
-                // Like
-                \Illuminate\Support\Facades\DB::table('komentar_like_publik')->insert([
-                    'komentar_id' => $id,
-                    'device_id' => $deviceIdentifier,
-                    'ip_address' => $ip,
-                    'user_agent' => $userAgent,
-                ]);
-                $liked = true;
+                // --- GUEST LOGIC ---
+                $sessionId = $request->session()->getId();
+                $ip = $request->ip();
+                $userAgent = $request->userAgent();
+                
+                // Unique identifier for device: Session ID + IP + User Agent
+                $deviceIdentifier = hash('sha256', $sessionId . $ip . $userAgent);
+
+                // Check if this device already liked this comment
+                $existingLike = \Illuminate\Support\Facades\DB::table('komentar_like_publik')
+                    ->where('komentar_id', $id)
+                    ->where('device_id', $deviceIdentifier)
+                    ->first();
+
+                if ($existingLike) {
+                    // Unlike
+                    \Illuminate\Support\Facades\DB::table('komentar_like_publik')
+                        ->where('id', $existingLike->id)
+                        ->delete();
+                    $liked = false;
+                } else {
+                    // Like
+                    \Illuminate\Support\Facades\DB::table('komentar_like_publik')->insert([
+                        'komentar_id' => $id,
+                        'device_id' => $deviceIdentifier,
+                        'ip_address' => $ip,
+                        'user_agent' => $userAgent,
+                    ]);
+                    $liked = true;
+                }
             }
 
             // Ambil total suka (Admin + Publik)
+            // Refresh to ensure we get the latest counts
             $totalLikes = $comment->total_likes;
 
             return response()->json([

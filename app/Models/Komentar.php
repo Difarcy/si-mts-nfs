@@ -64,4 +64,48 @@ class Komentar extends Model
             ->withCount(['likedByAdmins', 'likedByPublic'])
             ->orderBy('tanggal', 'asc');
     }
+
+    /**
+     * Helper to append 'is_liked_by_me' attribute to a collection of comments.
+     * Checks based on Auth status (Admin) or Device ID (Guest).
+     *
+     * @param \Illuminate\Support\Collection $comments
+     * @return \Illuminate\Support\Collection
+     */
+    public static function appendIsLikedStatus($comments)
+    {
+        if ($comments->isEmpty()) {
+            return $comments;
+        }
+
+        $likedCommentIds = [];
+
+        if (\Illuminate\Support\Facades\Auth::check()) {
+            // Check Admin Likes
+            $userId = \Illuminate\Support\Facades\Auth::id();
+            $likedCommentIds = \Illuminate\Support\Facades\DB::table('komentar_like')
+                ->whereIn('komentar_id', $comments->pluck('id'))
+                ->where('user_id', $userId)
+                ->pluck('komentar_id')
+                ->toArray();
+        } else {
+            // Check Guest Likes
+            $sessionId = session()->getId();
+            $ip = request()->ip();
+            $userAgent = request()->userAgent();
+            $deviceIdentifier = hash('sha256', $sessionId . $ip . $userAgent);
+
+            $likedCommentIds = \Illuminate\Support\Facades\DB::table('komentar_like_publik')
+                ->whereIn('komentar_id', $comments->pluck('id'))
+                ->where('device_id', $deviceIdentifier)
+                ->pluck('komentar_id')
+                ->toArray();
+        }
+
+        foreach ($comments as $comment) {
+            $comment->is_liked_by_me = in_array($comment->id, $likedCommentIds);
+        }
+
+        return $comments;
+    }
 }

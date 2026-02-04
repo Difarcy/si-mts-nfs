@@ -22,6 +22,28 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // --- AUTO-FIX STORAGE LINK (Cloud/Deployment Helper) ---
+        // Checks if public/storage symlink is missing and creates it automatically.
+        // This avoids the need to run "php artisan storage:link" manually after deployment.
+        if (!app()->runningInConsole()) {
+            $target = storage_path('app/public');
+            $link = public_path('storage');
+
+            if (!file_exists($link)) {
+                try {
+                    // Ensure target directory exists
+                    if (!is_dir($target)) {
+                        mkdir($target, 0755, true);
+                    }
+                    // Create symlink
+                    symlink($target, $link);
+                } catch (\Exception $e) {
+                    // Silent fail or log if needed
+                    // Log::warning('Auto-symlink failed: ' . $e->getMessage());
+                }
+            }
+        }
+
         // Dynamically register components for website and admin to follow the 2-folder rule
         $this->registerComponents('website');
         $this->registerComponents('admin');

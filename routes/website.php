@@ -208,6 +208,8 @@ Route::get('/achievement/{prestasiSiswa}', function (\App\Models\PrestasiSiswa $
         ->forWebsite()
         ->get();
 
+    \App\Models\Komentar::appendIsLikedStatus($comments);
+
     return view('website.pages.profile.achievement.detail', ['item' => $prestasiSiswa, 'relatedPosts' => $relatedPosts, 'comments' => $comments]);
 })->name('web.achievement.detail');
 
@@ -280,6 +282,8 @@ Route::get('/news/{berita}', function (Berita $berita) {
         ->where('konten_id', $post->id)
         ->forWebsite()
         ->get();
+
+    \App\Models\Komentar::appendIsLikedStatus($comments);
 
     return view('website.pages.information.news.detail', compact('post', 'relatedPosts', 'comments'));
 })->name('web.news.detail');
@@ -427,6 +431,8 @@ Route::get('/article/{artikel}', function (Artikel $artikel) {
         ->forWebsite()
         ->get();
 
+    \App\Models\Komentar::appendIsLikedStatus($comments);
+
     return view('website.pages.information.article.detail', compact('post', 'relatedPosts', 'comments'));
 })->name('web.article.detail');
 
@@ -498,6 +504,8 @@ Route::get('/announcement/{pengumuman}', function (\App\Models\Pengumuman $pengu
         ->forWebsite()
         ->get();
 
+    \App\Models\Komentar::appendIsLikedStatus($comments);
+
     return view('website.pages.information.announcement.detail', compact('post', 'relatedPosts', 'comments'));
 })->name('web.announcement.detail');
 
@@ -568,6 +576,8 @@ Route::get('/agenda/{agenda}', function (\App\Models\Agenda $agenda) {
         ->where('konten_id', $post->id)
         ->forWebsite()
         ->get();
+
+    \App\Models\Komentar::appendIsLikedStatus($comments);
 
     return view('website.pages.information.agenda.detail', compact('post', 'relatedPosts', 'comments'));
 })->name('web.agenda.detail');

@@ -1,6 +1,12 @@
 # SI-MTS-NFS
 
-Sistem Informasi Madrasah Tsanawiyah Nurul Falaah Soreang (Laravel 12 + Tailwind CSS 4).
+Sistem Informasi MTs Nurul Falaah Soreang.
+
+## 🛠️ Teknologi Utama
+- **Backend**: Laravel 12
+- **Styling**: Tailwind CSS 4
+- **Interactivity**: Alpine.js
+- **Bundler**: Vite
 
 ## 📋 Requirements
 - **PHP**: 8.2+
