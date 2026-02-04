@@ -43,7 +43,12 @@ class KomentarController extends Controller
                     abort(403, 'Admin hanya diperbolehkan membalas komentar.');
                 }
 
-                $nama = \Illuminate\Support\Facades\Auth::user()->name;
+                if ($request->filled('nama')) {
+                    $nama = trim($request->nama);
+                } else {
+                    $nama = \Illuminate\Support\Facades\Auth::user()->name;
+                }
+                
                 $email = \Illuminate\Support\Facades\Auth::user()->email;
                 $authorType = 'admin';
                 $status = 'approved'; // Auto-approve

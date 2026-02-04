@@ -121,16 +121,28 @@
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             @if(auth()->check())
-                                <input type="hidden" name="nama" value="{{ auth()->user()->name }}">
-                                <input type="hidden" name="email" value="{{ auth()->user()->email }}">
-                                <div class="col-span-1 sm:col-span-2 bg-green-50 px-4 py-3 rounded-lg border border-green-200 flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-xs border border-green-200">
-                                        {{ substr(auth()->user()->name, 0, 1) }}
+                                @php
+                                    $adminUser = auth()->user();
+                                    $adminName = $adminUser->nama ?? 'Admin'; // Ambil nama dari DB, fallback 'Admin'
+                                @endphp
+                                <input type="hidden" name="email" value="{{ $adminUser->email }}">
+                                
+                                <div class="col-span-1 sm:col-span-2 bg-green-50 px-4 py-3 rounded-lg border border-green-200 flex flex-col gap-2">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-sm border border-green-200 shrink-0">
+                                            {{ mb_strtoupper(mb_substr($adminName, 0, 1)) }}
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-xs text-gray-500 font-medium">Membalas sebagai:</p>
+                                            <div class="flex items-center gap-2">
+                                                <input type="text" name="nama" value="{{ $adminName }}" 
+                                                    class="text-sm font-bold text-green-800 bg-transparent border-b border-green-300 focus:border-green-600 focus:outline-none w-full sm:w-auto transition-colors placeholder-green-800/50" 
+                                                    placeholder="Nama Tampilan">
+                                                <span class="text-green-600 font-normal text-xs shrink-0">(Admin)</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500 font-medium">Membalas sebagai:</p>
-                                        <p class="text-sm font-bold text-green-800">{{ auth()->user()->name }} <span class="text-green-600 font-normal">(Admin)</span></p>
-                                    </div>
+                                    <p class="text-[10px] text-green-600 italic ml-12">Klik nama untuk mengubah tampilan nama balasan.</p>
                                 </div>
                             @else
                                 <x-website.form.input id="modal-nama" label="Nama" name="nama" required="true" placeholder="Nama Lengkap" autocomplete="name" />
