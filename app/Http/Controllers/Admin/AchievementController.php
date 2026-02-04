@@ -70,7 +70,25 @@ class AchievementController extends Controller
             $rules['student_photo'] = 'required|image|mimes:jpeg,png,jpg|max:10240';
         }
 
-        $request->validate($rules);
+        $request->validate($rules, [
+            'content.required' => 'Deskripsi prestasi wajib diisi.',
+            'author.required' => 'Penulis wajib diisi.',
+            'competition_name.required' => 'Nama kompetisi/lomba wajib diisi.',
+            'student_name.required' => 'Nama siswa wajib diisi.',
+            'class.required' => 'Kelas siswa wajib diisi.',
+            'level.required' => 'Tingkat kompetisi wajib dipilih.',
+            'type.required' => 'Jenis kompetisi wajib dipilih.',
+            'rank.required' => 'Peringkat/Juara wajib diisi.',
+            'achievement_date.required' => 'Tanggal prestasi wajib diisi.',
+            'student_photo.required' => 'Foto siswa wajib diunggah.',
+            'student_photo.image' => 'File foto harus berupa gambar.',
+            'student_photo.mimes' => 'Format foto harus jpeg, png, atau jpg.',
+            'student_photo.max' => 'Ukuran foto maksimal 10MB.',
+            'certificate.image' => 'File sertifikat harus berupa gambar.',
+            'certificate.mimes' => 'Format sertifikat harus jpeg, png, atau jpg.',
+            'certificate.max' => 'Ukuran sertifikat maksimal 10MB.',
+            'status.in' => 'Status yang dipilih tidak valid.',
+        ]);
 
         try {
             $data = $this->prepareAchievementData($request, $status);
@@ -148,7 +166,25 @@ class AchievementController extends Controller
             }
         }
 
-        $request->validate($rules);
+        $request->validate($rules, [
+            'content.required' => 'Deskripsi prestasi wajib diisi.',
+            'author.required' => 'Penulis wajib diisi.',
+            'competition_name.required' => 'Nama kompetisi/lomba wajib diisi.',
+            'student_name.required' => 'Nama siswa wajib diisi.',
+            'class.required' => 'Kelas siswa wajib diisi.',
+            'level.required' => 'Tingkat kompetisi wajib dipilih.',
+            'type.required' => 'Jenis kompetisi wajib dipilih.',
+            'rank.required' => 'Peringkat/Juara wajib diisi.',
+            'achievement_date.required' => 'Tanggal prestasi wajib diisi.',
+            'student_photo.required' => 'Foto siswa wajib diunggah.',
+            'student_photo.image' => 'File foto harus berupa gambar.',
+            'student_photo.mimes' => 'Format foto harus jpeg, png, atau jpg.',
+            'student_photo.max' => 'Ukuran foto maksimal 10MB.',
+            'certificate.image' => 'File sertifikat harus berupa gambar.',
+            'certificate.mimes' => 'Format sertifikat harus jpeg, png, atau jpg.',
+            'certificate.max' => 'Ukuran sertifikat maksimal 10MB.',
+            'status.in' => 'Status yang dipilih tidak valid.',
+        ]);
 
         try {
             $data = $this->prepareAchievementData($request, $status);

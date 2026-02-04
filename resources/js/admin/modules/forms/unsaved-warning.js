@@ -116,21 +116,37 @@ export function initUnsavedChangesWarning() {
         if (form.dataset.unsavedWarningInit === '1') return;
         form.dataset.unsavedWarningInit = '1';
 
+        // Flag untuk melacak interaksi user
+        form.__userHasInteracted = false;
+        
+        // Listener khusus untuk menandai interaksi user
+        const markInteraction = () => {
+            form.__userHasInteracted = true;
+        };
+        form.addEventListener('input', markInteraction, { once: true });
+        form.addEventListener('change', markInteraction, { once: true });
+
+        // 1. Ambil snapshot SEGERA (untuk menangani user yang mengetik cepat sebelum 500ms)
+        let immediateSnapshot = getFormSnapshot(form);
+
         // DETEKSI ERROR VALIDASI SERVER (Laravel)
-        // Jika form punya .is-invalid (error field) atau .alert-danger (error global),
-        // berarti form ini "baru saja gagal submit". 
-        // Kita anggap form ini "Dirty" (Unsaved) secara default, kecuali jika user belum mengubah apa-apa dari data lama.
-        // Tapi agar lebih aman (user mau pindah/batal), kita set initial snapshot berbeda agar terdeteksi beda.
         const hasServerErrors = form.querySelector('.is-invalid, .text-red-600, .bg-red-100, .alert-danger');
         
         if (hasServerErrors) {
-            // Trik: Set initial snapshot kosong agar snapshot saat ini (yang berisi data old input) dianggap "beda"
-            // Jadi sistem akan menganggap form ini "Dirty" sejak awal load.
+            // Trik: Set initial snapshot kosong agar snapshot saat ini dianggap "beda"
             form.__unsavedInitialSnapshot = 'force_dirty_state_due_to_error';
         } else {
-            // Delay taking the initial snapshot to allow other scripts/plugins to settle
+            // Set snapshot awal sementara
+            form.__unsavedInitialSnapshot = immediateSnapshot;
+
+            // 2. Update snapshot setelah 500ms (untuk menangani auto-fill/plugin scripts)
+            // TAPI hanya jika user BELUM berinteraksi.
+            // Jika user sudah mengetik dalam 500ms pertama, kita harus pakai snapshot awal (kosong),
+            // supaya ketikan mereka terhitung sebagai perubahan.
             setTimeout(() => {
-                form.__unsavedInitialSnapshot = getFormSnapshot(form);
+                if (!form.__userHasInteracted) {
+                    form.__unsavedInitialSnapshot = getFormSnapshot(form);
+                }
             }, 500);
         }
 

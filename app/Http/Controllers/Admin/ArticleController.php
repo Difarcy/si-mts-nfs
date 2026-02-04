@@ -92,6 +92,17 @@ class ArticleController extends Controller
 
         $request->validate($rules, [
             'image.max' => 'Maksimal upload adalah 6 gambar sekaligus.',
+            'title.required' => 'Judul artikel wajib diisi.',
+            'content.required' => 'Konten artikel wajib diisi.',
+            'author.required' => 'Penulis artikel wajib diisi.',
+            'thumbnail.required' => 'Gambar sampul (thumbnail) wajib diunggah.',
+            'thumbnail.image' => 'File harus berupa gambar.',
+            'thumbnail.mimes' => 'Format gambar harus jpeg, png, atau jpg.',
+            'thumbnail.max' => 'Ukuran gambar maksimal 10MB.',
+            'image.*.image' => 'File galeri harus berupa gambar.',
+            'image.*.mimes' => 'Format gambar galeri harus jpeg, png, atau jpg.',
+            'image.*.max' => 'Ukuran gambar galeri maksimal 10MB.',
+            'status.in' => 'Status yang dipilih tidak valid.',
         ]);
 
         // Validasi tambahan: Foto harus genap jika > 1, max 6
@@ -176,6 +187,17 @@ class ArticleController extends Controller
 
         $request->validate($rules, [
             'image.max' => 'Maksimal file baru yang diunggah adalah 6 gambar.',
+            'title.required' => 'Judul artikel wajib diisi.',
+            'content.required' => 'Konten artikel wajib diisi.',
+            'author.required' => 'Penulis artikel wajib diisi.',
+            'thumbnail.required' => 'Gambar sampul (thumbnail) wajib diunggah.',
+            'thumbnail.image' => 'File harus berupa gambar.',
+            'thumbnail.mimes' => 'Format gambar harus jpeg, png, atau jpg.',
+            'thumbnail.max' => 'Ukuran gambar maksimal 10MB.',
+            'image.*.image' => 'File galeri harus berupa gambar.',
+            'image.*.mimes' => 'Format gambar galeri harus jpeg, png, atau jpg.',
+            'image.*.max' => 'Ukuran gambar galeri maksimal 10MB.',
+            'status.in' => 'Status yang dipilih tidak valid.',
         ]);
 
         // Validasi tambahan: Total gambar (Existing + Baru) tidak boleh > 6

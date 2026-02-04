@@ -68,6 +68,10 @@ class VideoController extends Controller
                 'youtube_url' => 'required|string|max:2048',
                 'description' => 'nullable|string',
                 'status' => 'required|in:publish,draft',
+            ], [
+                'title.required' => 'Judul video wajib diisi.',
+                'youtube_url.required' => 'Link YouTube wajib diisi.',
+                'status.in' => 'Status yang dipilih tidak valid.',
             ]);
 
             $tanggalPublikasi = null;
@@ -127,6 +131,10 @@ class VideoController extends Controller
                 'youtube_url' => 'required|string|max:2048',
                 'description' => 'nullable|string',
                 'status' => 'required|in:publish,draft,nonaktif',
+            ], [
+                'title.required' => 'Judul video wajib diisi.',
+                'youtube_url.required' => 'Link YouTube wajib diisi.',
+                'status.in' => 'Status yang dipilih tidak valid.',
             ]);
 
             $tanggalPublikasi = $video->tanggal_publikasi;

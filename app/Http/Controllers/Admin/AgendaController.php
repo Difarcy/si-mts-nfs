@@ -75,6 +75,18 @@ class AgendaController extends Controller
 
         $request->validate($rules, [
             'image.max' => 'Maksimal upload adalah 6 gambar sekaligus.',
+            'title.required' => 'Judul agenda wajib diisi.',
+            'content.required' => 'Deskripsi agenda wajib diisi.',
+            'author.required' => 'Penyelenggara wajib diisi.',
+            'location.required' => 'Lokasi kegiatan wajib diisi.',
+            'start_date.required' => 'Tanggal mulai wajib diisi.',
+            'start_time.required' => 'Waktu mulai wajib diisi.',
+            'image.*.image' => 'File galeri harus berupa gambar.',
+            'image.*.mimes' => 'Format gambar galeri harus jpeg, png, atau jpg.',
+            'image.*.max' => 'Ukuran gambar galeri maksimal 10MB.',
+            'attachment.mimes' => 'Format lampiran harus PDF, Word, Excel, atau PowerPoint.',
+            'attachment.max' => 'Ukuran lampiran maksimal 10MB.',
+            'status.in' => 'Status yang dipilih tidak valid.',
         ]);
 
         // Validasi tambahan: Foto harus genap jika > 1, max 6
@@ -167,6 +179,18 @@ class AgendaController extends Controller
 
         $request->validate($rules, [
             'image.max' => 'Maksimal file baru yang diunggah adalah 6 gambar.',
+            'title.required' => 'Judul agenda wajib diisi.',
+            'content.required' => 'Deskripsi agenda wajib diisi.',
+            'author.required' => 'Penyelenggara wajib diisi.',
+            'location.required' => 'Lokasi kegiatan wajib diisi.',
+            'start_date.required' => 'Tanggal mulai wajib diisi.',
+            'start_time.required' => 'Waktu mulai wajib diisi.',
+            'image.*.image' => 'File galeri harus berupa gambar.',
+            'image.*.mimes' => 'Format gambar galeri harus jpeg, png, atau jpg.',
+            'image.*.max' => 'Ukuran gambar galeri maksimal 10MB.',
+            'attachment.mimes' => 'Format lampiran harus PDF, Word, Excel, atau PowerPoint.',
+            'attachment.max' => 'Ukuran lampiran maksimal 10MB.',
+            'status.in' => 'Status yang dipilih tidak valid.',
         ]);
 
         // Validasi tambahan: Total gambar (Existing + Baru) tidak boleh > 6

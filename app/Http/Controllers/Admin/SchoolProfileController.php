@@ -26,6 +26,10 @@ class SchoolProfileController extends Controller
                 'foto_sekolah' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
                 'deskripsi' => 'nullable|string',
                 'sejarah' => 'nullable|string',
+            ], [
+                'foto_sekolah.image' => 'File harus berupa gambar.',
+                'foto_sekolah.mimes' => 'Format gambar harus jpeg, png, jpg, atau gif.',
+                'foto_sekolah.max' => 'Ukuran gambar maksimal 10MB.',
             ]);
 
             $about = TentangSekolah::query()->orderBy('id')->first() ?? new TentangSekolah();
@@ -91,6 +95,11 @@ class SchoolProfileController extends Controller
                 'foto_kepala_madrasah' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
                 'nama' => 'nullable|string|max:255',
                 'sambutan' => 'nullable|string',
+            ], [
+                'foto_kepala_madrasah.image' => 'File harus berupa gambar.',
+                'foto_kepala_madrasah.mimes' => 'Format gambar harus jpeg, png, jpg, atau gif.',
+                'foto_kepala_madrasah.max' => 'Ukuran gambar maksimal 10MB.',
+                'nama.max' => 'Nama kepala madrasah maksimal 255 karakter.',
             ]);
 
             $greeting = KepalaMadrasah::query()->orderBy('id')->first() ?? new KepalaMadrasah();
@@ -127,6 +136,10 @@ class SchoolProfileController extends Controller
         try {
             $request->validate([
                 'struktur_organisasi' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
+            ], [
+                'struktur_organisasi.image' => 'File harus berupa gambar.',
+                'struktur_organisasi.mimes' => 'Format gambar harus jpeg, png, jpg, atau gif.',
+                'struktur_organisasi.max' => 'Ukuran gambar maksimal 10MB.',
             ]);
 
             $organization = StrukturOrganisasi::query()->orderBy('id')->first() ?? new StrukturOrganisasi();

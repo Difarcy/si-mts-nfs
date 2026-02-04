@@ -21,6 +21,11 @@ class PromotionBannerController extends Controller
         try {
             $request->validate([
                 'banner_promosi' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240',
+            ], [
+                'banner_promosi.required' => 'Wajib mengunggah banner promosi.',
+                'banner_promosi.image' => 'File harus berupa gambar.',
+                'banner_promosi.mimes' => 'Format gambar harus jpeg, png, jpg, atau gif.',
+                'banner_promosi.max' => 'Ukuran gambar maksimal 10MB.',
             ]);
 
             if (!$request->hasFile('banner_promosi')) {

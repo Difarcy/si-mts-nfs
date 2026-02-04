@@ -35,6 +35,13 @@ class PhotoController extends Controller
         $request->validate([
             'files' => 'required|array|max:16',
             'files.*' => 'image|mimes:jpeg,png,jpg|max:10240',
+        ], [
+            'files.required' => 'Wajib memilih minimal satu foto.',
+            'files.array' => 'Data file harus berupa array.',
+            'files.max' => 'Maksimal mengunggah 16 foto sekaligus.',
+            'files.*.image' => 'File harus berupa gambar.',
+            'files.*.mimes' => 'Format gambar harus jpeg, png, atau jpg.',
+            'files.*.max' => 'Ukuran setiap gambar maksimal 10MB.',
         ]);
 
         try {
