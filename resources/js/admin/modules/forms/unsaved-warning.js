@@ -116,7 +116,20 @@ export function initUnsavedChangesWarning() {
         if (form.dataset.unsavedWarningInit === '1') return;
         form.dataset.unsavedWarningInit = '1';
 
-        form.__unsavedInitialSnapshot = getFormSnapshot(form);
+        // DETEKSI ERROR VALIDASI SERVER (Laravel)
+        // Jika form punya .is-invalid (error field) atau .alert-danger (error global),
+        // berarti form ini "baru saja gagal submit". 
+        // Kita anggap form ini "Dirty" (Unsaved) secara default, kecuali jika user belum mengubah apa-apa dari data lama.
+        // Tapi agar lebih aman (user mau pindah/batal), kita set initial snapshot berbeda agar terdeteksi beda.
+        const hasServerErrors = form.querySelector('.is-invalid, .text-red-600, .bg-red-100');
+        
+        if (hasServerErrors) {
+            // Trik: Set initial snapshot kosong agar snapshot saat ini (yang berisi data old input) dianggap "beda"
+            // Jadi sistem akan menganggap form ini "Dirty" sejak awal load.
+            form.__unsavedInitialSnapshot = 'force_dirty_state_due_to_error';
+        } else {
+            form.__unsavedInitialSnapshot = getFormSnapshot(form);
+        }
 
         const scheduleUpdate = () => {
             clearTimeout(form.__unsavedUpdateTimer);
