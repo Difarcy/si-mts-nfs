@@ -136,11 +136,34 @@ export function initUnsavedChangesWarning() {
 
         form.addEventListener(
             'submit',
-            () => {
+            (e) => {
                 window.__adminUnsavedChangesSubmitting = true;
+
+                // Safety fallback: jika dalam 10 detik halaman tidak berpindah (karena error validasi atau ajax),
+                // kembalikan status submitting ke false agar warning aktif kembali.
+                setTimeout(() => {
+                    window.__adminUnsavedChangesSubmitting = false;
+                }, 5000);
             },
             true,
         );
+
+        // Listen in bubble phase to check if submit was prevented
+        form.addEventListener('submit', (e) => {
+            if (e.defaultPrevented) {
+                window.__adminUnsavedChangesSubmitting = false;
+            }
+        });
+
+        // Jika user kembali mengedit form (mengetik/klik), berarti submit batal/gagal
+        const resetSubmitting = () => {
+            if (window.__adminUnsavedChangesSubmitting) {
+                window.__adminUnsavedChangesSubmitting = false;
+            }
+        };
+        form.addEventListener('input', resetSubmitting);
+        form.addEventListener('change', resetSubmitting);
+        form.addEventListener('click', resetSubmitting);
     });
 
     let pendingNavigateTo = null;
