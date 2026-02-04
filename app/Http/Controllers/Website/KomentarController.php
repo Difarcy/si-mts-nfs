@@ -17,8 +17,8 @@ class KomentarController extends Controller
             }
 
             $validated = $request->validateWithBag('comment', [
-                'nama' => 'required|string|max:100',
-                'email' => 'required|email|max:120',
+                'nama' => 'sometimes|required|string|max:100',
+                'email' => 'sometimes|required|email|max:120',
                 'isi' => 'required|string|max:2000',
                 'thread_id' => 'nullable|integer|exists:komentar,id',
                 'parent_id' => 'nullable|integer|exists:komentar,id',
@@ -32,13 +32,39 @@ class KomentarController extends Controller
                 $threadId = $parent?->thread_id;
             }
 
+            // Determine Author Type & Status
+            if (\Illuminate\Support\Facades\Auth::check()) {
+                // ADMIN
+                // Block top-level comments for Admin (only replies allowed)
+                if (!$parentId) {
+                    if ($request->ajax() || $request->wantsJson()) {
+                        return response()->json(['success' => false, 'message' => 'Admin hanya diperbolehkan membalas komentar.'], 403);
+                    }
+                    abort(403, 'Admin hanya diperbolehkan membalas komentar.');
+                }
+
+                $nama = \Illuminate\Support\Facades\Auth::user()->name;
+                $email = \Illuminate\Support\Facades\Auth::user()->email;
+                $authorType = 'admin';
+                $status = 'approved'; // Auto-approve
+                $message = 'Balasan berhasil dikirim.';
+            } else {
+                // GUEST
+                $nama = $validated['nama'];
+                $email = $validated['email'];
+                $authorType = 'visitor';
+                $status = 'pending';
+                $message = 'Pesan berhasil dikirim. Komentar menunggu persetujuan admin.';
+            }
+
             $comment = Komentar::create([
                 'konten_tipe' => $type,
                 'konten_id' => $id,
-                'nama' => $validated['nama'],
-                'email' => $validated['email'],
+                'nama' => $nama,
+                'email' => $email,
                 'isi' => $validated['isi'],
-                'status' => 'pending',
+                'author_type' => $authorType,
+                'status' => $status,
                 'tanggal' => now(),
                 'thread_id' => $threadId,
                 'parent_id' => $parentId,

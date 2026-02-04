@@ -43,6 +43,24 @@
             </div>
 
             <div class="px-4 pb-3">
+                @if(auth()->check())
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-blue-100 text-blue-600 rounded-full shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-blue-800">Mode Administrator</h4>
+                                <p class="text-xs text-blue-700 mt-0.5">
+                                    Anda sedang login. Formulir komentar baru dinonaktifkan. 
+                                    Anda dapat membalas komentar pengunjung melalui tombol <strong>Balas</strong> pada komentar yang tersedia.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                @else
                 <p class="text-sm text-black mb-3 font-lato" id="form-instruction">Kami mengharapkan tanggapan dan masukan Anda untuk mendukung kegiatan dan informasi sekolah.</p>
 
                 <form method="POST" action="{{ route('web.komentar.store', ['type' => $contentType, 'id' => $contentId]) }}" class="space-y-4" data-comment-form="true">
@@ -67,6 +85,7 @@
                         </x-website.components.form.button>
                     </div>
                 </form>
+                @endif
             </div>
         </div>
     </div>
@@ -101,8 +120,22 @@
                         <input type="hidden" name="parent_id" id="modal-parent-id">
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <x-website.form.input id="modal-nama" label="Nama" name="nama" required="true" placeholder="Nama Lengkap" autocomplete="name" />
-                            <x-website.form.input id="modal-email" label="Email" name="email" type="email" required="true" placeholder="Alamat Email" autocomplete="email" />
+                            @if(auth()->check())
+                                <input type="hidden" name="nama" value="{{ auth()->user()->name }}">
+                                <input type="hidden" name="email" value="{{ auth()->user()->email }}">
+                                <div class="col-span-1 sm:col-span-2 bg-green-50 px-4 py-3 rounded-lg border border-green-200 flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-xs border border-green-200">
+                                        {{ substr(auth()->user()->name, 0, 1) }}
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 font-medium">Membalas sebagai:</p>
+                                        <p class="text-sm font-bold text-green-800">{{ auth()->user()->name }} <span class="text-green-600 font-normal">(Admin)</span></p>
+                                    </div>
+                                </div>
+                            @else
+                                <x-website.form.input id="modal-nama" label="Nama" name="nama" required="true" placeholder="Nama Lengkap" autocomplete="name" />
+                                <x-website.form.input id="modal-email" label="Email" name="email" type="email" required="true" placeholder="Alamat Email" autocomplete="email" />
+                            @endif
                         </div>
 
                         <x-website.form.textarea id="modal-isi" label="Balasan" name="isi" rows="4" required="true" placeholder="Tulis balasan..." wrapperClass="flex-1 flex flex-col min-h-0" class="flex-1 min-h-0" />

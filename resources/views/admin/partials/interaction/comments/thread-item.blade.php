@@ -53,6 +53,7 @@
                             </div>
                             <span
                                 class="like-text {{ $liked ? 'text-green-700' : 'text-slate-900 group-hover:text-green-700' }}">Suka</span>
+                            <span class="like-count {{ $likeCount > 0 ? '' : 'hidden' }} {{ $liked ? 'text-green-700' : 'text-slate-900 group-hover:text-green-700' }} ml-0.5">{{ $likeCount > 0 ? $likeCount : '' }}</span>
                         </button>
                     @endif
 
