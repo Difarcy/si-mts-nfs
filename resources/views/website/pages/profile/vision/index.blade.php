@@ -18,7 +18,7 @@
                 @if($visiMisiTujuan?->visi)
                     <div
                         class="prose prose-sm sm:prose-base max-w-none text-black leading-relaxed text-justify font-inter">
-                        {!! $visiMisiTujuan->visi !!}
+                        {!! nl2br(e($visiMisiTujuan->visi)) !!}
                     </div>
                 @else
                     <div class="py-16 flex flex-col items-center justify-center text-center">
@@ -38,7 +38,7 @@
 
                 @if($visiMisiTujuan?->misi)
                     <div class="prose prose-sm sm:prose-base max-w-none text-black leading-relaxed text-justify font-inter">
-                        {!! $visiMisiTujuan->misi !!}
+                        {!! nl2br(e($visiMisiTujuan->misi)) !!}
                     </div>
                 @else
                     <div class="py-16 flex flex-col items-center justify-center text-center">
@@ -58,7 +58,7 @@
 
                 @if($visiMisiTujuan?->tujuan)
                     <div class="prose prose-sm sm:prose-base max-w-none text-black leading-relaxed text-justify font-inter">
-                        {!! $visiMisiTujuan->tujuan !!}
+                        {!! nl2br(e($visiMisiTujuan->tujuan)) !!}
                     </div>
                 @else
                     <div class="py-16 flex flex-col items-center justify-center text-center">

@@ -117,7 +117,11 @@
         </div>
 
         <div class="prose prose-base sm:prose-base max-w-none text-black leading-relaxed font-lato text-justify">
-            {!! $item->deskripsi !!}
+            @if(!empty($item->deskripsi))
+                {!! nl2br(e($item->deskripsi)) !!}
+            @else
+                <p>Deskripsi prestasi tidak tersedia.</p>
+            @endif
 
             <!-- Certificate in Content -->
             @if($item->sertifikat)

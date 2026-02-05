@@ -42,7 +42,7 @@
 
         @if($showDescription && !empty($description))
             <p
-                class="text-[10px] sm:text-base lg:text-lg text-white mb-3 sm:mb-6 drop-shadow-md leading-relaxed max-w-2xl text-left">
+                class="text-[10px] sm:text-base lg:text-lg text-white mb-3 sm:mb-6 drop-shadow-md leading-relaxed max-w-2xl text-left whitespace-pre-line">
                 {{ $description }}
             </p>
         @endif

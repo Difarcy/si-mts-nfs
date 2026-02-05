@@ -36,7 +36,7 @@
                 <section class="w-full">
                     <div class="prose prose-lg max-w-none w-full text-black leading-relaxed text-justify font-inter">
                         @if($tentangSekolah?->deskripsi)
-                            {!! $tentangSekolah->deskripsi !!}
+                            {!! nl2br(e($tentangSekolah->deskripsi)) !!}
                         @else
                             <div class="py-20 flex items-center justify-center text-center w-full">
                                 <p class="text-xs sm:text-base font-semibold text-slate-900 tracking-wider">Belum Ada Deskripsi
@@ -52,7 +52,7 @@
 
                     <div class="prose prose-lg max-w-none w-full text-black leading-relaxed text-justify font-inter">
                         @if($tentangSekolah?->sejarah)
-                            {!! $tentangSekolah->sejarah !!}
+                            {!! nl2br(e($tentangSekolah->sejarah)) !!}
                         @else
                             <div class="py-20 flex items-center justify-center text-center w-full">
                                 <p class="text-xs sm:text-base font-semibold text-slate-900 tracking-wider">Belum Ada Sejarah

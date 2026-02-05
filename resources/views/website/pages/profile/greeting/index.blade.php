@@ -48,7 +48,7 @@
 
                 <div class="prose prose-lg max-w-none text-black leading-relaxed text-justify font-inter">
                     @if($kepalaMadrasah?->sambutan)
-                        {!! $kepalaMadrasah->sambutan !!}
+                        {!! nl2br(e($kepalaMadrasah->sambutan)) !!}
                     @else
                         <div class="min-h-[400px] flex flex-col items-center justify-center text-center w-full">
                             <p class="text-xs sm:text-base font-semibold text-slate-900 tracking-wider">

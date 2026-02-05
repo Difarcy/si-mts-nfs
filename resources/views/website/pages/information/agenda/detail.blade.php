@@ -140,7 +140,11 @@
 
         <!-- Content -->
         <div class="prose prose-base sm:prose-base max-w-none text-black leading-relaxed text-justify font-lato">
-            {!! $post->deskripsi ?? '<p>Deskripsi lengkap agenda sedang tidak tersedia.</p>' !!}
+            @if(!empty($post->deskripsi))
+                {!! nl2br(e($post->deskripsi)) !!}
+            @else
+                <p>Deskripsi lengkap agenda sedang tidak tersedia.</p>
+            @endif
         </div>
 
         <!-- Attachment Section -->

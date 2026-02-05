@@ -20,7 +20,7 @@
                         </div>
                     </a>
                 </div>
-                <p class="text-xs sm:text-sm md:text-base text-gray-200 leading-relaxed mb-4">
+                <p class="text-xs sm:text-sm md:text-base text-gray-200 leading-relaxed mb-4 whitespace-pre-line">
                     {{ $kontak?->deskripsi ?: 'Belum ada' }}
                 </p>
                 <div class="flex items-center gap-4">
@@ -220,7 +220,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        <span class="text-xs sm:text-sm md:text-base text-gray-200 leading-relaxed">
+                        <span class="text-xs sm:text-sm md:text-base text-gray-200 leading-relaxed whitespace-pre-line">
                             {{ $kontak?->alamat ?: 'Belum ada' }}
                         </span>
                     </li>

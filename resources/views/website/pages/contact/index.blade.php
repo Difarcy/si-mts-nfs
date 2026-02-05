@@ -89,7 +89,7 @@
                                         </svg>
                                     </div>
                                     <div class="flex flex-col">
-                                        <p class="text-black leading-relaxed max-w-xs font-inter text-xs sm:text-sm">
+                                        <p class="text-black leading-relaxed max-w-xs font-inter text-xs sm:text-sm whitespace-pre-line">
                                             {{ $kontak?->alamat ?: 'Belum ada' }}
                                         </p>
                                     </div>
