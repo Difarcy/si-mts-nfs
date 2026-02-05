@@ -118,6 +118,19 @@ export function initChatbot() {
         windowEl.classList.remove('flex');
     };
 
+    const setVisible = (visible) => {
+        if (visible) {
+            container.classList.remove('hidden');
+            return;
+        }
+
+        setOpen(false);
+        container.classList.add('hidden');
+    };
+
+    document.addEventListener('chatbot:hide', () => setVisible(false));
+    document.addEventListener('chatbot:show', () => setVisible(true));
+
     const setTyping = (show) => {
         if (show) {
             typingEl.classList.remove('hidden');

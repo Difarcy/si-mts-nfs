@@ -7,6 +7,10 @@ export function initCommentForms() {
     initCommentInteractions();
 }
 
+function setChatbotVisible(visible) {
+    document.dispatchEvent(new CustomEvent(visible ? 'chatbot:show' : 'chatbot:hide'));
+}
+
 function initCommentSubmission() {
     const forms = Array.from(document.querySelectorAll('form[data-comment-form="true"]'));
     if (forms.length === 0) return;
@@ -57,6 +61,18 @@ function initCommentInteractions() {
     const commentsSection = document.getElementById('comments-section');
     if (!commentsSection) return;
 
+    const replyModal = document.getElementById('reply-modal');
+    if (replyModal) {
+        const nameInput = replyModal.querySelector('[data-reply-name]');
+        const avatarInitial = replyModal.querySelector('[data-reply-avatar-initial]');
+        if (nameInput && avatarInitial) {
+            nameInput.addEventListener('input', () => {
+                const val = String(nameInput.value || '').trim();
+                avatarInitial.textContent = val ? val[0].toUpperCase() : 'A';
+            });
+        }
+    }
+
     // Delegate click events
     commentsSection.addEventListener('click', (e) => {
         const target = e.target.closest('[data-action]');
@@ -74,21 +90,14 @@ function initCommentInteractions() {
             case 'close-reply-modal':
                 closeReplyModal();
                 break;
+            case 'minimize-reply-modal':
+                toggleReplyMinimize();
+                break;
             case 'toggle-replies':
                 toggleReplies(target);
                 break;
         }
     });
-
-    // Handle close modal on backdrop click
-    const replyModal = document.getElementById('reply-modal');
-    if (replyModal) {
-        replyModal.addEventListener('click', (e) => {
-            if (e.target === replyModal) {
-                closeReplyModal();
-            }
-        });
-    }
 }
 
 function toggleReplies(btn) {
@@ -107,11 +116,13 @@ function startReply(btn) {
     const threadId = btn.dataset.threadId || btn.dataset.id;
     const name = btn.dataset.name;
     const modal = document.getElementById('reply-modal');
-    const panel = document.getElementById('reply-modal-panel');
     const backdrop = modal?.querySelector('[data-reply-backdrop]');
+    const panel = modal?.querySelector('[data-reply-panel]');
+    const body = modal?.querySelector('[data-reply-body]');
+    const shell = modal?.querySelector('[data-reply-shell]');
     const threadInput = document.getElementById('modal-thread-id');
     const parentInput = document.getElementById('modal-parent-id');
-    const targetName = document.getElementById('modal-reply-target');
+    const targetName = modal?.querySelector('[data-reply-to-name]') || document.getElementById('modal-reply-target');
 
     if (!modal || !panel || !threadInput || !parentInput || !targetName) return;
 
@@ -131,17 +142,27 @@ function startReply(btn) {
         panel.classList.add('translate-y-0');
     });
 
+    if (body) body.classList.remove('hidden');
+    if (shell) {
+        shell.style.height = '';
+        shell.style.maxHeight = '';
+    }
+
+    setChatbotVisible(false);
+
     // Focus on name input
     setTimeout(() => {
-        const nameInput = document.getElementById('modal-nama');
-        if (nameInput) nameInput.focus();
+        const textarea = modal.querySelector('[data-reply-textarea]') || document.getElementById('modal-isi');
+        if (textarea) textarea.focus();
     }, 100); // Wait for animation start
 }
 
 function closeReplyModal() {
     const modal = document.getElementById('reply-modal');
-    const panel = document.getElementById('reply-modal-panel');
     const backdrop = modal?.querySelector('[data-reply-backdrop]');
+    const panel = modal?.querySelector('[data-reply-panel]');
+    const body = modal?.querySelector('[data-reply-body]');
+    const shell = modal?.querySelector('[data-reply-shell]');
 
     if (!modal || !panel) return;
 
@@ -157,6 +178,34 @@ function closeReplyModal() {
         modal.classList.remove('pointer-events-auto');
         modal.classList.add('hidden');
     }, 300); // Match transition duration
+
+    if (body) body.classList.remove('hidden');
+    if (shell) {
+        shell.style.height = '';
+        shell.style.maxHeight = '';
+    }
+
+    setChatbotVisible(true);
+}
+
+function toggleReplyMinimize() {
+    const modal = document.getElementById('reply-modal');
+    if (!modal) return;
+
+    const header = modal.querySelector('[data-reply-header]');
+    const body = modal.querySelector('[data-reply-body]');
+    const shell = modal.querySelector('[data-reply-shell]');
+    if (!header || !body || !shell) return;
+
+    const isMinimized = body.classList.toggle('hidden');
+    if (isMinimized) {
+        const headerHeight = header.getBoundingClientRect().height;
+        shell.style.height = `${Math.ceil(headerHeight)}px`;
+        shell.style.maxHeight = `${Math.ceil(headerHeight)}px`;
+    } else {
+        shell.style.height = '';
+        shell.style.maxHeight = '';
+    }
 }
 
 async function likeComment(btn) {

@@ -70,7 +70,7 @@
                         $replyTo = $message->email;
                         $replySubject = rawurlencode('Re: ' . ($message->subject ?? ''));
                         $replyBody = rawurlencode("Halo {$message->nama},\n\nTerima kasih sudah menghubungi kami.\n\n---\nPesan Anda:\n" . ($message->pesan ?? ''));
-                        $gmailUrl = "https://mail.google.com/mail/?view=cm&fs=1&to=" . rawurlencode($replyTo) . "&su={$replySubject}&body={$replyBody}";
+                        $gmailUrl = "https://mail.google.com/mail/?fs=1&tf=cm&to=" . rawurlencode($replyTo) . "&su={$replySubject}&body={$replyBody}";
 
                         // WhatsApp Logic
                         $phoneNumber = $message->telepon;
