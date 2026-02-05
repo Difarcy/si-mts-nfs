@@ -22,10 +22,10 @@
                                 class="text-[13px] sm:text-[18px] font-bold text-black font-roboto-slab leading-tight inline-block border-b border-green-600 pb-1 mb-2">
                                 Hubungi Kami</h3>
                             <ul class="space-y-5 font-inter">
-                                <li class="flex items-center gap-3 group">
+                                <li class="flex items-start gap-3 group">
                                     <div
-                                        class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black flex items-center justify-center shrink-0">
-                                        <svg class="w-full h-full scale-90" viewBox="0 0 24 24" fill="currentColor"
+                                        class="w-4 h-4 sm:w-5 sm:h-5 text-black flex items-center justify-center shrink-0 h-5 sm:h-5">
+                                        <svg class="w-full h-full scale-75" viewBox="0 0 24 24" fill="currentColor"
                                             aria-hidden="true">
                                             <path
                                                 d="M20.52 3.48A11.9 11.9 0 0 0 12.04 0C5.43 0 0 5.43 0 12.04c0 2.12.55 4.2 1.6 6.03L0 24l6.13-1.6a11.95 11.95 0 0 0 5.91 1.5h.01C18.67 23.9 24 18.57 24 11.96c0-3.2-1.24-6.2-3.48-8.48zM12.05 21.7h-.01a9.9 9.9 0 0 1-5.05-1.38l-.36-.21-3.64.95.97-3.55-.23-.37A9.9 9.9 0 1 1 12.05 21.7zm5.76-7.38c-.31-.15-1.82-.9-2.1-1-.28-.1-.48-.15-.68.15-.2.3-.78 1-.95 1.2-.17.2-.35.22-.66.07-.31-.15-1.3-.48-2.48-1.53-.92-.82-1.54-1.83-1.72-2.14-.18-.31-.02-.48.13-.63.14-.14.31-.35.46-.53.15-.18.2-.31.31-.51.1-.2.05-.38-.03-.53-.08-.15-.68-1.64-.93-2.25-.24-.58-.49-.5-.68-.51h-.58c-.2 0-.53.08-.8.38-.27.3-1.06 1.03-1.06 2.5 0 1.47 1.09 2.9 1.24 3.1.15.2 2.14 3.27 5.18 4.58.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.09 1.82-.74 2.08-1.46.26-.72.26-1.34.18-1.46-.08-.12-.28-.2-.58-.35z" />
@@ -40,17 +40,17 @@
                                                 }
                                             @endphp
                                             <a href="https://wa.me/{{ $waNumber }}" target="_blank" rel="noopener noreferrer"
-                                                class="text-black hover:text-green-700 transition-colors text-xs sm:text-sm">{{ $kontak->whatsapp }}</a>
+                                                class="text-black hover:text-green-700 transition-colors text-xs sm:text-sm leading-relaxed">{{ $kontak->whatsapp }}</a>
                                         @else
-                                            <span class="text-black text-xs sm:text-sm">Belum ada</span>
+                                            <span class="text-black text-xs sm:text-sm leading-relaxed">Belum ada</span>
                                         @endif
                                     </div>
                                 </li>
-                                <li class="flex items-center gap-3 group">
+                                <li class="flex items-start gap-3 group">
                                     <div
-                                        class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black flex items-center justify-center shrink-0">
-                                        <svg class="w-full h-full" fill="none" stroke="currentColor" stroke-width="1.5"
-                                            viewBox="0 0 24 24">
+                                        class="w-4 h-4 sm:w-5 sm:h-5 text-black flex items-center justify-center shrink-0 h-5 sm:h-5">
+                                        <svg class="w-full h-full scale-90" fill="none" stroke="currentColor"
+                                            stroke-width="1.5" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                         </svg>
@@ -58,17 +58,17 @@
                                     <div class="flex flex-col">
                                         @if($kontak?->telepon)
                                             <a href="tel:{{ preg_replace('/[^0-9+]/', '', $kontak->telepon) }}"
-                                                class="text-black hover:text-blue-700 transition-colors text-xs sm:text-sm">{{ $kontak->telepon }}</a>
+                                                class="text-black hover:text-blue-700 transition-colors text-xs sm:text-sm leading-relaxed">{{ $kontak->telepon }}</a>
                                         @else
-                                            <span class="text-black text-xs sm:text-sm">Belum ada</span>
+                                            <span class="text-black text-xs sm:text-sm leading-relaxed">Belum ada</span>
                                         @endif
                                     </div>
                                 </li>
-                                <li class="flex items-center gap-3 group">
+                                <li class="flex items-start gap-3 group">
                                     <div
-                                        class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black flex items-center justify-center shrink-0">
-                                        <svg class="w-full h-full" fill="none" stroke="currentColor" stroke-width="1.5"
-                                            viewBox="0 0 24 24">
+                                        class="w-4 h-4 sm:w-5 sm:h-5 text-black flex items-center justify-center shrink-0 h-5 sm:h-5">
+                                        <svg class="w-full h-full scale-90" fill="none" stroke="currentColor"
+                                            stroke-width="1.5" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                         </svg>
@@ -76,17 +76,17 @@
                                     <div class="flex flex-col">
                                         @if($kontak?->email)
                                             <a href="mailto:{{ $kontak->email }}"
-                                                class="text-black hover:text-red-700 transition-colors text-xs sm:text-sm">{{ $kontak->email }}</a>
+                                                class="text-black hover:text-red-700 transition-colors text-xs sm:text-sm leading-relaxed">{{ $kontak->email }}</a>
                                         @else
-                                            <span class="text-black text-xs sm:text-sm">Belum ada</span>
+                                            <span class="text-black text-xs sm:text-sm leading-relaxed">Belum ada</span>
                                         @endif
                                     </div>
                                 </li>
                                 <li class="flex items-start gap-3 group">
                                     <div
-                                        class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black flex items-center justify-center shrink-0">
-                                        <svg class="w-full h-full" fill="none" stroke="currentColor" stroke-width="1.5"
-                                            viewBox="0 0 24 24">
+                                        class="w-4 h-4 sm:w-5 sm:h-5 text-black flex items-center justify-center shrink-0 h-5 sm:h-5">
+                                        <svg class="w-full h-full scale-90" fill="none" stroke="currentColor"
+                                            stroke-width="1.5" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -94,10 +94,14 @@
                                         </svg>
                                     </div>
                                     <div class="flex flex-col">
-                                        <p
-                                            class="text-black leading-relaxed max-w-xs font-inter text-xs sm:text-sm whitespace-pre-line">
-                                            {{ $kontak?->alamat ?: 'Belum ada' }}
-                                        </p>
+                                        @if($kontak?->alamat)
+                                            <p
+                                                class="text-black leading-relaxed max-w-xs font-inter text-xs sm:text-sm whitespace-pre-line">
+                                                {{ $kontak->alamat }}
+                                            </p>
+                                        @else
+                                            <span class="text-black text-xs sm:text-sm leading-relaxed">Belum ada</span>
+                                        @endif
                                     </div>
                                 </li>
                             </ul>

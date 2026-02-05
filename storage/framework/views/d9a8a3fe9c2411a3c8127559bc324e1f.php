@@ -6,6 +6,12 @@
             <?php if(auth()->guard()->check()): ?>
                 <a href="<?php echo e(route('admin.dashboard')); ?>"
                     class="hover:text-yellow-400 transition-colors font-medium"><?php echo e(Auth::user()->nama); ?></a>
+                <span class="border-l border-white/30 h-4"></span>
+                <a href="<?php echo e(route('logout')); ?>" class="hover:text-yellow-400 transition-colors font-medium"
+                    onclick="event.preventDefault(); document.getElementById('website-logout-form')?.submit();">Logout</a>
+                <form action="<?php echo e(route('logout')); ?>" method="POST" id="website-logout-form" class="hidden">
+                    <?php echo csrf_field(); ?>
+                </form>
             <?php else: ?>
                 <a href="/auth" class="hover:text-yellow-400 transition-colors font-medium">Login</a>
             <?php endif; ?>
