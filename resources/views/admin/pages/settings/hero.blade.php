@@ -50,11 +50,11 @@
                         <x-admin.form.input name="judul" label="Judul" :value="$hero->judul" placeholder="Masukan Judul" />
                     </div>
 
-                    <div class="space-y-1">
+                    <div>
                         <x-admin.form.textarea name="deskripsi" label="Moto / Slogan"
                             placeholder="Maksimal 2 kalimat atau 3 baris" rows="3"
                             data-hero-slogan="1">{{ trim($hero->deskripsi) }}</x-admin.form.textarea>
-                        <p class="text-[11px] text-gray-400">Maksimal 2 kalimat atau 3 baris.</p>
+                        <p class="text-[11px] text-gray-400 -mt-0.5 sm:-mt-1">Maksimal 2 kalimat atau 3 baris.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -21,10 +21,7 @@
                         </div>
                     </a>
                 </div>
-                <p class="text-xs sm:text-sm md:text-base text-gray-200 font-bold drop-shadow-lg leading-relaxed mb-4 whitespace-pre-line">
-                    <?php echo e($kontak?->deskripsi ?: 'Belum ada'); ?>
-
-                </p>
+                <p class="text-xs sm:text-sm md:text-base text-gray-200 leading-relaxed mb-4 whitespace-pre-line max-w-xs break-words"><?php echo e(trim($kontak?->deskripsi ?: 'Belum ada')); ?></p>
                 <div class="flex items-center gap-4">
                     <?php if(!empty($socialLinks['facebook'])): ?>
                         <a href="<?php echo e($socialLinks['facebook']); ?>" target="_blank" rel="noopener noreferrer" class="text-white transition-colors duration-300 hover:text-[#1877F2] transform hover:scale-110" aria-label="Facebook">
@@ -228,10 +225,7 @@
                             </svg>
                         </div>
                         <?php if($kontak?->alamat): ?>
-                            <span class="inline-block text-xs sm:text-sm md:text-base text-gray-200 leading-relaxed whitespace-pre-line">
-                                <?php echo e($kontak->alamat); ?>
-
-                            </span>
+                            <span class="inline-block text-xs sm:text-sm md:text-base text-gray-200 leading-relaxed"><?php echo e(trim($kontak->alamat)); ?></span>
                         <?php else: ?>
                             <span class="inline-block text-xs sm:text-sm md:text-base text-gray-200 leading-relaxed">Belum ada</span>
                         <?php endif; ?>

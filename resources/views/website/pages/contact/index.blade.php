@@ -95,8 +95,7 @@
                                     </div>
                                     <div class="flex flex-col">
                                         @if($kontak?->alamat)
-                                            <p
-                                                class="text-black leading-relaxed max-w-xs font-inter text-xs sm:text-sm whitespace-pre-line">
+                                            <p class="text-black leading-relaxed max-w-xs font-inter text-xs sm:text-sm">
                                                 {{ trim($kontak->alamat) }}</p>
                                         @else
                                             <span class="text-black text-xs sm:text-sm leading-relaxed">Belum ada</span>

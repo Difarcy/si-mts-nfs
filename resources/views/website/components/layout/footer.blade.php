@@ -223,7 +223,7 @@
                             </svg>
                         </div>
                         @if($kontak?->alamat)
-                            <span class="inline-block text-xs sm:text-sm md:text-base text-gray-200 leading-relaxed whitespace-pre-line">{{ trim($kontak->alamat) }}</span>
+                            <span class="inline-block text-xs sm:text-sm md:text-base text-gray-200 leading-relaxed">{{ trim($kontak->alamat) }}</span>
                         @else
                             <span class="inline-block text-xs sm:text-sm md:text-base text-gray-200 leading-relaxed">Belum ada</span>
                         @endif
