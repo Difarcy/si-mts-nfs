@@ -80,7 +80,7 @@
                                 </li>
                                 <li class="flex items-start gap-3 group">
                                     <div
-                                        class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black flex items-center justify-center shrink-0 mt-1">
+                                        class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black flex items-center justify-center shrink-0 mt-0.5">
                                         <svg class="w-full h-full" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
