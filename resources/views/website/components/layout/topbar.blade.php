@@ -6,6 +6,12 @@
             @auth
                 <a href="{{ route('admin.dashboard') }}"
                     class="hover:text-yellow-400 transition-colors font-medium">{{ Auth::user()->nama }}</a>
+                <span class="border-l border-white/30 h-4"></span>
+                <a href="{{ route('logout') }}" class="hover:text-yellow-400 transition-colors font-medium"
+                    onclick="event.preventDefault(); document.getElementById('website-logout-form')?.submit();">Logout</a>
+                <form action="{{ route('logout') }}" method="POST" id="website-logout-form" class="hidden">
+                    @csrf
+                </form>
             @else
                 <a href="/auth" class="hover:text-yellow-400 transition-colors font-medium">Login</a>
             @endauth

@@ -1,6 +1,6 @@
 {{-- ============================================================
 NAVBAR - TOMBOL-TOMBOL DI KANAN HEADER (MOBILE OPTIMIZED)
-Berisi: Bantuan, Ubah Username, Ubah Password, Keluar
+Berisi: Bantuan, Ubah Username, Ubah Password, Logout
 ============================================================ --}}
 <div
     class="flex flex-nowrap items-center justify-end gap-2 overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
@@ -40,7 +40,7 @@ Berisi: Bantuan, Ubah Username, Ubah Password, Keluar
         <span class="hidden sm:inline">Ubah Password</span>
     </x-admin.form.button>
 
-    {{-- Tombol Keluar (Merah) --}}
+    {{-- Tombol Logout (Merah) --}}
     <x-admin.form.button variant="danger" type="button" id="btn-logout-trigger">
         <x-slot:icon>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -49,7 +49,7 @@ Berisi: Bantuan, Ubah Username, Ubah Password, Keluar
                 </path>
             </svg>
         </x-slot:icon>
-        <span class="hidden sm:inline">Keluar</span>
+        <span class="hidden sm:inline">Logout</span>
     </x-admin.form.button>
     <form action="{{ route('admin.logout') }}" method="POST" id="logout-form" class="hidden">
         @csrf
