@@ -9,7 +9,7 @@
     $description = $hero->deskripsi ?? 'Deskripsi banner belum tersedia';
     $buttonText = $hero->button_text ?? 'Teks tombol';
     $buttonLink = $hero->button_url ?? null;
-    
+
     // Display Options
     $showLogo = $hero->show_logo ?? true;
     $showTagline = $hero->show_tagline ?? true;
@@ -21,7 +21,7 @@
 <!-- Konten Hero (Logo, Teks, Tombol) -->
 <div class="absolute inset-0 flex items-end pb-6 md:pb-16 z-20 pointer-events-none">
     <div class="px-6 max-w-3xl sm:pl-10 lg:pl-20 pointer-events-auto">
-        <div class="flex flex-col gap-1.5 sm:gap-3">
+        <div class="flex flex-col items-start gap-0.5 sm:gap-1.5">
             @if($showLogo)
                 <div>
                     <img src="{{ $websiteLogo }}" alt="Logo {{ 'MTs Nurul Falaah' }}"
@@ -42,14 +42,15 @@
             @endif
 
             @if($showDescription && !empty($description))
-                <p class="text-[10px] sm:text-base lg:text-lg text-white drop-shadow-md leading-relaxed max-w-2xl text-left whitespace-pre-line">
+                <p
+                    class="text-[10px] sm:text-base lg:text-lg text-white drop-shadow-md leading-relaxed max-w-xl text-left whitespace-pre-line line-clamp-3 overflow-hidden text-ellipsis">
                     {{ $description }}
                 </p>
             @endif
 
             @if($showButton)
                 @php
-                    $btnClass = "inline-block bg-green-700 hover:bg-green-800 text-white font-bold py-1 px-3.5 sm:py-2 sm:px-8 rounded-md transition-all duration-300 flex items-center gap-2 text-[10px] sm:text-base shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform";
+                    $btnClass = "inline-block bg-green-700 hover:bg-green-800 text-white font-bold py-1 px-3.5 sm:py-2 sm:px-5 rounded-md transition-all duration-300 flex items-center gap-2 text-[10px] sm:text-base shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform mt-1 sm:mt-2";
                 @endphp
                 @if($buttonLink)
                     <a href="{{ $buttonLink }}" class="{{ $btnClass }}">
