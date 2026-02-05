@@ -5,6 +5,7 @@ import { initPreviewImageModal } from '../media/preview-image';
 import { initFilePicker } from './file-picker';
 import { initSubmitProtection } from './submit-protection';
 import { initUnsavedChangesWarning } from './unsaved-warning';
+import { initTextareaAutoList } from '../../../core/textarea-auto-list';
 
 /**
  * Forms Module Entry Point
@@ -16,6 +17,7 @@ export const FormsModule = {
         initChangeDetection();
         initPreviewImageModal();
         initFilePicker();
+        initTextareaAutoList();
         initSubmitProtection();
         initUnsavedChangesWarning();
     }

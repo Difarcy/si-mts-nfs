@@ -20,18 +20,39 @@ class PromotionBannerController extends Controller
     {
         try {
             $request->validate([
-                'banner_promosi' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240',
+                'banner_promosi' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
+                'banner_promosi_remove' => 'nullable|in:0,1',
             ], [
-                'banner_promosi.required' => 'Wajib mengunggah banner promosi.',
                 'banner_promosi.image' => 'File harus berupa gambar.',
                 'banner_promosi.mimes' => 'Format gambar harus jpeg, png, jpg, atau gif.',
                 'banner_promosi.max' => 'Ukuran gambar maksimal 10MB.',
             ]);
 
+            $removeRequested = (string) $request->input('banner_promosi_remove', '0') === '1';
+
+            $banner = BannerPromosi::first();
+            $oldPath = $banner ? $banner->path : null;
+
+            if ($removeRequested && !$request->hasFile('banner_promosi')) {
+                if ($oldPath && Storage::disk('public')->exists($oldPath)) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+
+                if ($banner) {
+                    $banner->delete();
+                }
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Banner promosi berhasil dihapus',
+                    'path' => null,
+                ]);
+            }
+
             if (!$request->hasFile('banner_promosi')) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'File banner promosi tidak ditemukan',
+                    'message' => 'Tidak ada perubahan untuk disimpan',
                 ], 400);
             }
 
@@ -55,8 +76,9 @@ class PromotionBannerController extends Controller
                 ], 400);
             }
 
-            $banner = BannerPromosi::first();
-            $oldPath = $banner ? $banner->path : null;
+            if ($oldPath && Storage::disk('public')->exists($oldPath)) {
+                Storage::disk('public')->delete($oldPath);
+            }
 
             $filename = uniqid('banner_promosi_') . '.' . $file->getClientOriginalExtension();
 

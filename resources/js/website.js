@@ -16,6 +16,7 @@ import { initToast as initWebsiteToast } from './website/ui/notifications';
 import { initContactForm } from './website/modules/contact';
 import { initCommentForms } from './website/modules/comments';
 import { initChatbot } from './website/modules/chatbot';
+import { initTextareaAutoList } from './core/textarea-auto-list';
 
 // Initialize UI components
 document.addEventListener('DOMContentLoaded', () => {
@@ -27,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initVideoPreview();
     initCalendarWidget();
     initChatbot();
+    initTextareaAutoList();
     
     // Initialize Modules based on page data attribute
     if (document.querySelector('[data-page="contact"]')) {
