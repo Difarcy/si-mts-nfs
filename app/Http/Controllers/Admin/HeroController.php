@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Hero;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class HeroController extends Controller
 {
@@ -29,7 +30,29 @@ class HeroController extends Controller
             $request->validate([
                 'tagline' => 'nullable|string|max:255',
                 'judul' => 'nullable|string|max:255',
-                'deskripsi' => 'nullable|string',
+                'deskripsi' => [
+                    'nullable',
+                    'string',
+                    function ($attribute, $value, $fail) {
+                        $v = trim((string) $value);
+                        if ($v === '') {
+                            return;
+                        }
+
+                        $lines = preg_split("/\r\n|\r|\n/", $v);
+                        if (count($lines) > 3) {
+                            $fail('Moto / Slogan maksimal 3 baris.');
+                        }
+
+                        $normalized = preg_replace('/\s+/', ' ', $v);
+                        $sentences = preg_split('/[.!?]+/', $normalized, -1, PREG_SPLIT_NO_EMPTY);
+                        $sentences = array_values(array_filter(array_map('trim', $sentences)));
+
+                        if (count($sentences) > 2) {
+                            $fail('Moto / Slogan maksimal 2 kalimat.');
+                        }
+                    },
+                ],
                 'button_text' => 'nullable|string|max:100',
                 'button_url' => 'nullable|string|max:255',
             ]);
@@ -60,7 +83,11 @@ class HeroController extends Controller
                 'success' => true,
                 'message' => 'Pengaturan Hero berhasil diperbarui!'
             ]);
-
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validasi gagal: ' . implode(', ', $e->validator->errors()->all()),
+            ], 422);
         } catch (\Exception $e) {
             Log::error('Hero Update Error: ' . $e->getMessage());
             return response()->json([

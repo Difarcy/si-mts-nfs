@@ -46,9 +46,11 @@
                         <x-admin.form.input name="judul" label="Judul" :value="$hero->judul" placeholder="Masukan Judul" />
                     </div>
 
-                    <x-admin.form.textarea name="deskripsi" label="Moto / Slogan" placeholder="Masukan Moto / Slogan" rows="4">
+                    <x-admin.form.textarea name="deskripsi" label="Moto / Slogan" placeholder="Maksimal 2 kalimat atau 3 baris" rows="3" data-hero-slogan="1">
                         {{ $hero->deskripsi }}
                     </x-admin.form.textarea>
+
+                    <p class="text-xs text-slate-500">Maksimal 2 kalimat atau 3 baris.</p>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <x-admin.form.input name="button_text" label="Teks Tombol" :value="$hero->button_text" placeholder="Masukan Teks Tombol" />
