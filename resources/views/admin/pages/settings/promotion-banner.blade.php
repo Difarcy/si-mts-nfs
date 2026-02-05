@@ -47,6 +47,9 @@
                         :existing="$bannerPromosiUrl"
                         :existingValue="$bannerPromosiPath"
                         objectFit="object-cover"
+                        data-confirm-remove="1"
+                        data-confirm-remove-title="Konfirmasi"
+                        data-confirm-remove-message="Hapus gambar banner promosi ini?"
                     />
                 </div>
             </form>

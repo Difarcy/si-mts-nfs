@@ -3,7 +3,7 @@
  * Menangani preview gambar pada komponen upload-image (Single & Multiple)
  */
 
-import { showToast } from '../../ui/notifications';
+import { openConfirm, showToast } from '../../ui/notifications';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
@@ -379,9 +379,21 @@ export function initUploadPreview() {
 
         // --- HANDLER: REMOVE SINGLE ---
         if (singleRemoveBtn) {
-            singleRemoveBtn.addEventListener('click', (e) => {
+            singleRemoveBtn.addEventListener('click', async (e) => {
                 e.preventDefault();
                 e.stopPropagation();
+
+                if (container.dataset.confirmRemove === '1') {
+                    const confirmed = await openConfirm({
+                        title: container.dataset.confirmRemoveTitle || 'Konfirmasi',
+                        message: container.dataset.confirmRemoveMessage || 'Hapus gambar ini?',
+                        okText: container.dataset.confirmRemoveOk || 'Hapus',
+                        cancelText: container.dataset.confirmRemoveCancel || 'Batal',
+                        variant: container.dataset.confirmRemoveVariant || 'danger',
+                    });
+                    if (!confirmed) return;
+                }
+
                 input.value = '';
                 singlePreviewImage.src = '';
                 placeholder.classList.remove('hidden');
@@ -392,6 +404,7 @@ export function initUploadPreview() {
                 const existingHidden = container.querySelector(`input[type="hidden"][name="${input.name}_existing"]`);
                 if (existingHidden) existingHidden.remove();
                 input.dispatchEvent(new Event('change', { bubbles: true }));
+                container.dispatchEvent(new CustomEvent('upload:updated'));
             });
         }
         // --- SINKRONISASI AKHIR SAAT SUBMIT ---

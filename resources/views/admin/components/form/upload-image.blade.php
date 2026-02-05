@@ -28,7 +28,7 @@
         </label>
     @endif
 
-    <div class="relative w-full group/upload" 
+    <div {{ $attributes->merge(['class' => 'relative w-full group/upload']) }}
          data-component="upload-image" 
          data-multiple="{{ $multiple ? 'true' : 'false' }}"
          data-max-files="{{ $maxFiles }}">

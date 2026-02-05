@@ -32,7 +32,7 @@
                         <x-admin.form.checkbox name="show_logo" label="Logo" :checked="$hero->show_logo" />
                         <x-admin.form.checkbox name="show_tagline" label="Tagline" :checked="$hero->show_tagline" />
                         <x-admin.form.checkbox name="show_judul" label="Judul" :checked="$hero->show_judul" />
-                        <x-admin.form.checkbox name="show_deskripsi" label="Deskripsi" :checked="$hero->show_deskripsi" />
+                        <x-admin.form.checkbox name="show_deskripsi" label="Moto / Slogan" :checked="$hero->show_deskripsi" />
                         <x-admin.form.checkbox name="show_button" label="Tombol" :checked="$hero->show_button" />
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                         <x-admin.form.input name="judul" label="Judul" :value="$hero->judul" placeholder="Masukan Judul" />
                     </div>
 
-                    <x-admin.form.textarea name="deskripsi" label="Deskripsi" placeholder="Masukan Deskripsi" rows="4">
+                    <x-admin.form.textarea name="deskripsi" label="Moto / Slogan" placeholder="Masukan Moto / Slogan" rows="4">
                         {{ $hero->deskripsi }}
                     </x-admin.form.textarea>
 

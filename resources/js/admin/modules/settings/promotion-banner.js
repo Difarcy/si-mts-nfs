@@ -14,6 +14,13 @@ export function initPromotionBannerSettings() {
         if (fileInput.files && fileInput.files.length > 0) return true;
 
         if (uploadContainer) {
+            const removeFlag = uploadContainer.querySelector('input[type="hidden"][name$="_remove"]');
+            if (removeFlag && String(removeFlag.value || '') === '1') {
+                return true;
+            }
+        }
+
+        if (uploadContainer) {
             const previewContainer = uploadContainer.querySelector('.upload-preview-container');
             if (previewContainer && !previewContainer.classList.contains('hidden')) {
                 return true;
