@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\DeletesRelatedKomentar;
 
 class Berita extends Model
 {
+    use DeletesRelatedKomentar;
+
+    public const KOMENTAR_KONTEN_TIPE = 'news';
+
     // Nama tabel di database
     protected $table = 'berita';
 

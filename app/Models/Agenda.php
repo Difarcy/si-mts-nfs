@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\DeletesRelatedKomentar;
 
 class Agenda extends Model
 {
+    use DeletesRelatedKomentar;
+
+    public const KOMENTAR_KONTEN_TIPE = 'agenda';
+
     protected $table = 'agenda';
 
     public $timestamps = false;

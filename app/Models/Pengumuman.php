@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\DeletesRelatedKomentar;
 
 class Pengumuman extends Model
 {
+    use DeletesRelatedKomentar;
+
+    public const KOMENTAR_KONTEN_TIPE = 'announcement';
+
     protected $table = 'pengumuman';
 
     public $timestamps = false;
