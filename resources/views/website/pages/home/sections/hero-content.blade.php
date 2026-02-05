@@ -43,7 +43,8 @@
                 @endif
 
                 @if($showDescription && !empty($description))
-                    <p class="text-[10px] sm:text-base lg:text-lg text-white font-bold drop-shadow-md leading-relaxed max-w-xl text-left line-clamp-3 md:line-clamp-5 break-words">
+                    <p
+                        class="text-[10px] sm:text-base lg:text-lg text-white drop-shadow-md leading-relaxed max-w-xl text-left line-clamp-3 md:line-clamp-5 break-words">
                         {{ $description }}
                     </p>
                 @endif
