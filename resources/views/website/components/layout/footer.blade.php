@@ -20,7 +20,7 @@
                         </div>
                     </a>
                 </div>
-                <p class="text-xs sm:text-sm md:text-base text-gray-200 font-bold drop-shadow-lg leading-relaxed mb-4 whitespace-pre-line max-w-xs">{{ trim($kontak?->deskripsi ?: 'Belum ada') }}</p>
+                <p class="text-xs sm:text-sm md:text-base text-gray-200 leading-relaxed mb-4 whitespace-pre-line max-w-xs break-words">{{ trim($kontak?->deskripsi ?: 'Belum ada') }}</p>
                 <div class="flex items-center gap-4">
                     @if(!empty($socialLinks['facebook']))
                         <a href="{{ $socialLinks['facebook'] }}" target="_blank" rel="noopener noreferrer" class="text-white transition-colors duration-300 hover:text-[#1877F2] transform hover:scale-110" aria-label="Facebook">
