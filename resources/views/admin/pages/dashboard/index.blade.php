@@ -167,7 +167,7 @@
                         </path>
                     </svg>
                 </div>
-                <span class="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-green-600 mt-1">Upload
+                <span class="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-green-600 mt-1">Tambah
                     Video</span>
             </a>
         </div>
