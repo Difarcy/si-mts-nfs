@@ -20,7 +20,7 @@ class HeroController extends Controller
             'show_deskripsi' => true,
             'show_button' => true,
         ]);
-        
+
         return view('admin.pages.settings.hero', compact('hero'));
     }
 
@@ -33,23 +33,25 @@ class HeroController extends Controller
                 'deskripsi' => [
                     'nullable',
                     'string',
+                    'max:500', // Increased limit to be safe
                     function ($attribute, $value, $fail) {
                         $v = trim((string) $value);
-                        if ($v === '') {
+                        if ($v === '')
                             return;
-                        }
 
-                        $lines = preg_split("/\r\n|\r|\n/", $v);
+                        // Count lines (ignoring empty lines at the end)
+                        $lines = array_filter(preg_split("/\r\n|\r|\n/", $v), fn($line) => trim($line) !== '');
                         if (count($lines) > 3) {
-                            $fail('Moto / Slogan maksimal 3 baris.');
+                            $fail('Moto / Slogan maksimal 3 baris teks.');
                         }
 
+                        // Count sentences: split by punctuation followed by space or end of string
+                        // We also normalize spaces first
                         $normalized = preg_replace('/\s+/', ' ', $v);
-                        $sentences = preg_split('/[.!?]+/', $normalized, -1, PREG_SPLIT_NO_EMPTY);
-                        $sentences = array_values(array_filter(array_map('trim', $sentences)));
+                        $sentences = preg_split('/[.!?](\s|$)/', $normalized, -1, PREG_SPLIT_NO_EMPTY);
 
                         if (count($sentences) > 2) {
-                            $fail('Moto / Slogan maksimal 2 kalimat.');
+                            $fail('Moto / Slogan maksimal 2 kalimat saja.');
                         }
                     },
                 ],
@@ -72,7 +74,7 @@ class HeroController extends Controller
             ];
 
             $hero = Hero::first();
-            
+
             if ($hero) {
                 $hero->update($data);
             } else {
