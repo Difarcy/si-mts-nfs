@@ -97,10 +97,9 @@
                                         @if($kontak?->alamat)
                                             <p
                                                 class="text-black leading-relaxed max-w-xs font-inter text-xs sm:text-sm whitespace-pre-line">
-                                                {{ $kontak->alamat }}
-                                            </p>
+                                                {{ trim($kontak->alamat) }}</p>
                                         @else
-                                            <span class="text-black text-xs sm:text-sm leading-relaxed">Belum ada</span>
+                                            <p class="text-black text-xs sm:text-sm leading-relaxed">Belum ada</p>
                                         @endif
                                     </div>
                                 </li>
