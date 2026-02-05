@@ -63,6 +63,10 @@
     <x-admin.ui.unsaved-changes />
     <x-admin.ui.notifications />
 
+    @if ($errors->any())
+        <div data-admin-server-errors="1" hidden></div>
+    @endif
+
     @stack('scripts')
 </body>
 

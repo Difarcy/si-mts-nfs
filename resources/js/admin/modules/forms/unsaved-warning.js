@@ -130,7 +130,9 @@ export function initUnsavedChangesWarning() {
         let immediateSnapshot = getFormSnapshot(form);
 
         // DETEKSI ERROR VALIDASI SERVER (Laravel)
-        const hasServerErrors = form.querySelector('.is-invalid, .text-red-600, .bg-red-100, .alert-danger');
+        const hasServerErrors =
+            document.querySelector('[data-admin-server-errors="1"]') ||
+            form.querySelector('.is-invalid, [aria-invalid="true"], .invalid-feedback, .alert-danger');
         
         if (hasServerErrors) {
             // Trik: Set initial snapshot kosong agar snapshot saat ini dianggap "beda"
