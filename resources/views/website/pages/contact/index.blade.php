@@ -99,7 +99,7 @@
                                                 class="text-black leading-relaxed max-w-xs font-inter text-xs sm:text-sm whitespace-pre-line">
                                                 {{ trim($kontak->alamat) }}</p>
                                         @else
-                                            <p class="text-black text-xs sm:text-sm leading-relaxed">Belum ada</p>
+                                            <span class="text-black text-xs sm:text-sm leading-relaxed">Belum ada</span>
                                         @endif
                                     </div>
                                 </li>
