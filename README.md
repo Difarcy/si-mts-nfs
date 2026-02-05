@@ -1,6 +1,6 @@
 # SI-MTS-NFS
 
-Sistem Informasi MTs Nurul Falaah Soreang.
+Sistem Informasi MTs Nurul Falaah Soreang
 
 ## 🛠️ Teknologi Utama
 - **Backend**: Laravel 12
