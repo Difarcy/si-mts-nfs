@@ -53,7 +53,7 @@ class AgendaController extends Controller
         $status = $request->input('status', 'draft');
 
         $rules = [
-            'status' => 'required|in:publish,draft,nonaktif',
+            'status' => 'required|in:publish,draft',
             'tags' => 'nullable|string',
             'image' => 'nullable|array|max:6',
             'image.*' => 'image|mimes:jpeg,png,jpg|max:10240',

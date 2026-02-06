@@ -46,7 +46,7 @@ class AchievementController extends Controller
         $status = $request->input('status', 'draft');
 
         $rules = [
-            'status' => 'required|in:publish,draft,nonaktif',
+            'status' => 'required|in:publish,draft',
             'tags' => 'nullable|string',
             'student_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:10240',
             'certificate' => 'nullable|image|mimes:jpeg,png,jpg|max:10240',
