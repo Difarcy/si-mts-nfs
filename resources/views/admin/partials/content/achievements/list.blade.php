@@ -9,7 +9,6 @@
                         <th class="px-2 sm:px-4 py-2 sm:py-3 text-center w-28 sm:w-44 text-[10px] sm:text-xs">Nama Siswa
                         </th>
                         <th class="px-2 sm:px-4 py-2 sm:py-3 text-center w-24 sm:w-32 text-[10px] sm:text-xs">Kategori</th>
-                        <th class="px-2 sm:px-4 py-2 sm:py-3 text-center w-28 sm:w-44 text-[10px] sm:text-xs">Tags</th>
                         <th class="px-2 sm:px-4 py-2 sm:py-3 text-center w-20 sm:w-28 text-[10px] sm:text-xs">Peringkat</th>
                         <th class="px-2 sm:px-4 py-2 sm:py-3 text-center w-20 sm:w-28 text-[10px] sm:text-xs">Status</th>
                         <th class="px-2 sm:px-4 py-2 sm:py-3 text-center w-20 sm:w-28 text-[10px] sm:text-xs">Aksi</th>
@@ -38,26 +37,6 @@
                             <div class="flex flex-col items-center justify-center">
                                 <span class="text-[10px] sm:text-xs font-semibold text-black">{{ $item->tingkat }}</span>
                                 <span class="text-[9px] sm:text-[11px] text-black font-medium">{{ $item->jenis }}</span>
-                            </div>
-                        </td>
-                        <td class="px-2 sm:px-4 py-2 sm:py-3">
-                            @php
-                                $tags = $item->tags
-                                    ? array_values(array_filter(array_map('trim', explode(',', (string) $item->tags))))
-                                    : [];
-                                $visibleTags = array_slice($tags, 0, 3);
-                                $remainingTags = count($tags) - count($visibleTags);
-                            @endphp
-                            <div class="flex flex-wrap justify-center gap-1">
-                                @foreach($visibleTags as $tag)
-                                    <span class="px-2 py-0.5 text-[9px] font-bold bg-gray-50 border border-black/10 rounded">{{ $tag }}</span>
-                                @endforeach
-                                @if($remainingTags > 0)
-                                    <span class="px-2 py-0.5 text-[9px] font-bold text-slate-900">+{{ $remainingTags }}</span>
-                                @endif
-                                @if(count($tags) === 0)
-                                    <span class="text-[9px] sm:text-[11px] text-slate-900">-</span>
-                                @endif
                             </div>
                         </td>
                         <td class="px-2 sm:px-4 py-2 sm:py-3 text-center">

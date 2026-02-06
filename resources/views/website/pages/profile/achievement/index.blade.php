@@ -67,6 +67,10 @@
                                             {{ $achievement->tanggal ? \Carbon\Carbon::parse($achievement->tanggal)->isoFormat('D MMM Y') : '-' }}
                                         </span>
                                     </div>
+
+                                    <div class="text-[11px] sm:text-sm text-slate-900 font-medium font-lato line-clamp-1">
+                                        {{ $achievement->penyelenggara ?? '-' }}
+                                    </div>
                                 </a>
                                 
                                 <a href="{{ route('web.achievement.detail', $achievement) }}" class="block mt-auto">
