@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Http;
 
 use App\Models\Hero;
 use App\Models\Artikel;
+use App\Models\ChatbotLog;
 
 class ChatbotController
 {
@@ -33,41 +34,27 @@ class ChatbotController
         ]);
 
         $deepseekKey = (string) config('services.deepseek.key', '');
-        $openAiKey = (string) config('services.openai.key', '');
 
         // Fallback untuk environment variable langsung
         if (empty($deepseekKey)) {
             $deepseekKey = env('DEEPSEEK_API_KEY', '');
-        }
-        if (empty($openAiKey)) {
-            $openAiKey = env('OPENAI_API_KEY', '');
         }
 
         // Paksa baca env jika masih kosong (debug mode)
         if (empty($deepseekKey)) {
             $deepseekKey = getenv('DEEPSEEK_API_KEY') ?: '';
         }
-        if (empty($openAiKey)) {
-            $openAiKey = getenv('OPENAI_API_KEY') ?: '';
-        }
 
         // Hardcode check (untuk memastikan config terbaca)
         if (empty($deepseekKey) && !empty($_ENV['DEEPSEEK_API_KEY'])) {
             $deepseekKey = $_ENV['DEEPSEEK_API_KEY'];
         }
-        if (empty($openAiKey) && !empty($_ENV['OPENAI_API_KEY'])) {
-            $openAiKey = $_ENV['OPENAI_API_KEY'];
-        }
 
-        $provider = $deepseekKey !== '' ? 'deepseek' : 'openai';
-        $apiKey = $provider === 'deepseek' ? $deepseekKey : $openAiKey;
+        $apiKey = $deepseekKey;
 
         if ($apiKey === '') {
-            // Log untuk debug di server (opsional, bisa dihapus nanti)
-            // \Illuminate\Support\Facades\Log::error('Chatbot AI Key Missing. Deepseek: ' . ($deepseekKey ? 'SET' : 'EMPTY') . ', OpenAI: ' . ($openAiKey ? 'SET' : 'EMPTY'));
-            
             return response()->json([
-                'reply' => 'Maaf, fitur AI untuk Nafa belum diaktifkan. Silakan konfigurasi DEEPSEEK_API_KEY atau OPENAI_API_KEY terlebih dahulu.',
+                'reply' => 'Maaf, fitur AI untuk Nafa belum diaktifkan. Silakan konfigurasi DEEPSEEK_API_KEY terlebih dahulu.',
             ], 503);
         }
 
@@ -124,7 +111,7 @@ ATURAN PENTING:
 - Jika ditanya video, gunakan bagian \"Video Terbaru\". Jika tidak ada bagian itu, sampaikan belum ada video terbaru di website kami.
 - Jika ditanya tentang STRUKTUR ORGANISASI, jawab dengan sopan bahwa \"informasi struktur organisasi dapat dilihat secara lengkap pada menu Profil di website sekolah\", karena data tersebut berbentuk bagan/gambar yang tidak bisa saya baca.
 - JANGAN PERNAH menyebutkan kata \"database\", \"data resmi\", \"system\", atau hal teknis lainnya kepada pengguna. Gunakan istilah seperti \"informasi sekolah\" atau \"website resmi\".
-- Jika ditanya hal teknis yang tidak ada di data (seperti 'siapa guru matematika kelas 7'), arahkan untuk menghubungi kontak sekolah.
+- Jika ditanya hal teknis yang bersifat personal atau sangat spesifik (seperti 'siapa guru matematika kelas 7' atau 'berapa nilai rapor anak saya'), sampaikan dengan sopan bahwa data tersebut bersifat internal. Sarankan pengguna untuk mengakses portal resmi terkait seperti EMIS atau RDM (Rapor Digital Madrasah) menggunakan akun yang telah diberikan, atau silakan hubungi staf Tata Usaha secara langsung.
 - Jawablah dengan paragraf pendek yang nyaman dibaca tanpa format bold/italic.";
 
         $history = collect(Arr::get($validated, 'messages', []))
@@ -139,17 +126,12 @@ ATURAN PENTING:
             ['role' => 'user', 'content' => $validated['message']],
         ]);
 
-        $model = $provider === 'deepseek'
-            ? (string) config('services.deepseek.model', 'deepseek-chat')
-            : (string) config('services.openai.model', 'gpt-4o-mini');
+        $model = (string) config('services.deepseek.model', 'deepseek-chat');
 
-        $endpoint = 'https://api.openai.com/v1/chat/completions';
-        if ($provider === 'deepseek') {
-            $baseUrl = rtrim((string) config('services.deepseek.base_url', 'https://api.deepseek.com'), '/');
-            $endpoint = str_ends_with($baseUrl, '/v1')
-                ? $baseUrl . '/chat/completions'
-                : $baseUrl . '/v1/chat/completions';
-        }
+        $baseUrl = rtrim((string) config('services.deepseek.base_url', 'https://api.deepseek.com'), '/');
+        $endpoint = str_ends_with($baseUrl, '/v1')
+            ? $baseUrl . '/chat/completions'
+            : $baseUrl . '/v1/chat/completions';
 
         $response = Http::withToken($apiKey)
             ->acceptJson()
@@ -176,6 +158,24 @@ ATURAN PENTING:
             ], 502);
         }
 
+        // Simpan Log ke Database (Fakta untuk Laporan KP)
+        try {
+            // Pembersihan otomatis log lama (misal: hapus log > 30 hari)
+            ChatbotLog::where('created_at', '<', now()->subDays(30))->delete();
+
+            ChatbotLog::create([
+                'session_id' => session()->getId(),
+                'ip_address' => $request->ip(),
+                'user_message' => $validated['message'],
+                'bot_response' => $reply,
+                'model' => $model,
+                'tokens_used' => data_get($response->json(), 'usage.total_tokens'),
+                'created_at' => now(),
+            ]);
+        } catch (\Throwable $e) {
+            // Silently fail logging to not break user experience
+        }
+
         return response()->json([
             'reply' => $reply,
         ]);
@@ -191,9 +191,12 @@ ATURAN PENTING:
         try {
             $hero = Hero::query()->orderBy('id')->first();
             if ($hero) {
-                if (!empty($hero->tagline)) $lines[] = 'Tagline Sekolah: ' . trim($hero->tagline);
-                if (!empty($hero->judul)) $lines[] = 'Judul Banner Utama: ' . trim($hero->judul);
-                if (!empty($hero->deskripsi)) $lines[] = 'Deskripsi Utama: ' . trim($hero->deskripsi);
+                if (!empty($hero->tagline))
+                    $lines[] = 'Tagline Sekolah: ' . trim($hero->tagline);
+                if (!empty($hero->judul))
+                    $lines[] = 'Judul Banner Utama: ' . trim($hero->judul);
+                if (!empty($hero->deskripsi))
+                    $lines[] = 'Deskripsi Utama: ' . trim($hero->deskripsi);
             }
         } catch (\Throwable) {
         }
@@ -201,11 +204,16 @@ ATURAN PENTING:
         try {
             $kontak = Kontak::query()->orderBy('id')->first();
             if ($kontak) {
-                if (!empty($kontak->alamat)) $lines[] = 'Alamat sekolah: ' . trim((string) $kontak->alamat);
-                if (!empty($kontak->telepon)) $lines[] = 'Telepon: ' . trim((string) $kontak->telepon);
-                if (!empty($kontak->whatsapp)) $lines[] = 'WhatsApp: ' . trim((string) $kontak->whatsapp);
-                if (!empty($kontak->email)) $lines[] = 'Email: ' . trim((string) $kontak->email);
-                if (!empty($kontak->koordinat)) $lines[] = 'Koordinat (lat,long): ' . trim((string) $kontak->koordinat);
+                if (!empty($kontak->alamat))
+                    $lines[] = 'Alamat sekolah: ' . trim((string) $kontak->alamat);
+                if (!empty($kontak->telepon))
+                    $lines[] = 'Telepon: ' . trim((string) $kontak->telepon);
+                if (!empty($kontak->whatsapp))
+                    $lines[] = 'WhatsApp: ' . trim((string) $kontak->whatsapp);
+                if (!empty($kontak->email))
+                    $lines[] = 'Email: ' . trim((string) $kontak->email);
+                if (!empty($kontak->koordinat))
+                    $lines[] = 'Koordinat (lat,long): ' . trim((string) $kontak->koordinat);
             }
         } catch (\Throwable) {
         }
@@ -218,9 +226,12 @@ ATURAN PENTING:
                 $kuota = $spmb->kuota;
                 $biaya = $spmb->biaya;
 
-                if ($tahun !== '') $lines[] = 'SPMB tahun: ' . $tahun;
-                if ($status !== '') $lines[] = 'Status SPMB: ' . $status;
-                if (!is_null($kuota)) $lines[] = 'Kuota SPMB: ' . (int) $kuota;
+                if ($tahun !== '')
+                    $lines[] = 'SPMB tahun: ' . $tahun;
+                if ($status !== '')
+                    $lines[] = 'Status SPMB: ' . $status;
+                if (!is_null($kuota))
+                    $lines[] = 'Kuota SPMB: ' . (int) $kuota;
 
                 if (is_null($biaya) || (int) $biaya === 0) {
                     $lines[] = 'Biaya masuk SPMB: Gratis';
@@ -231,18 +242,28 @@ ATURAN PENTING:
                 // Jadwal Pendaftaran (Gelombang 1 & 2)
                 $jadwal = [];
                 // Gelombang 1
-                if (!empty($spmb->g1t1nm)) $jadwal[] = "{$spmb->g1t1nm}: " . ($spmb->g1t1st ?? '-') . " s/d " . ($spmb->g1t1en ?? '-');
-                if (!empty($spmb->g1t2nm)) $jadwal[] = "{$spmb->g1t2nm}: " . ($spmb->g1t2st ?? '-') . " s/d " . ($spmb->g1t2en ?? '-');
-                if (!empty($spmb->g1t3nm)) $jadwal[] = "{$spmb->g1t3nm}: " . ($spmb->g1t3st ?? '-') . " s/d " . ($spmb->g1t3en ?? '-');
-                if (!empty($spmb->g1t4nm)) $jadwal[] = "{$spmb->g1t4nm}: " . ($spmb->g1t4st ?? '-') . " s/d " . ($spmb->g1t4en ?? '-');
-                if (!empty($spmb->g1t5nm)) $jadwal[] = "{$spmb->g1t5nm}: " . ($spmb->g1t5st ?? '-') . " s/d " . ($spmb->g1t5en ?? '-');
+                if (!empty($spmb->g1t1nm))
+                    $jadwal[] = "{$spmb->g1t1nm}: " . ($spmb->g1t1st ?? '-') . " s/d " . ($spmb->g1t1en ?? '-');
+                if (!empty($spmb->g1t2nm))
+                    $jadwal[] = "{$spmb->g1t2nm}: " . ($spmb->g1t2st ?? '-') . " s/d " . ($spmb->g1t2en ?? '-');
+                if (!empty($spmb->g1t3nm))
+                    $jadwal[] = "{$spmb->g1t3nm}: " . ($spmb->g1t3st ?? '-') . " s/d " . ($spmb->g1t3en ?? '-');
+                if (!empty($spmb->g1t4nm))
+                    $jadwal[] = "{$spmb->g1t4nm}: " . ($spmb->g1t4st ?? '-') . " s/d " . ($spmb->g1t4en ?? '-');
+                if (!empty($spmb->g1t5nm))
+                    $jadwal[] = "{$spmb->g1t5nm}: " . ($spmb->g1t5st ?? '-') . " s/d " . ($spmb->g1t5en ?? '-');
 
                 // Gelombang 2
-                if (!empty($spmb->g2t1nm)) $jadwal[] = "{$spmb->g2t1nm}: " . ($spmb->g2t1st ?? '-') . " s/d " . ($spmb->g2t1en ?? '-');
-                if (!empty($spmb->g2t2nm)) $jadwal[] = "{$spmb->g2t2nm}: " . ($spmb->g2t2st ?? '-') . " s/d " . ($spmb->g2t2en ?? '-');
-                if (!empty($spmb->g2t3nm)) $jadwal[] = "{$spmb->g2t3nm}: " . ($spmb->g2t3st ?? '-') . " s/d " . ($spmb->g2t3en ?? '-');
-                if (!empty($spmb->g2t4nm)) $jadwal[] = "{$spmb->g2t4nm}: " . ($spmb->g2t4st ?? '-') . " s/d " . ($spmb->g2t4en ?? '-');
-                if (!empty($spmb->g2t5nm)) $jadwal[] = "{$spmb->g2t5nm}: " . ($spmb->g2t5st ?? '-') . " s/d " . ($spmb->g2t5en ?? '-');
+                if (!empty($spmb->g2t1nm))
+                    $jadwal[] = "{$spmb->g2t1nm}: " . ($spmb->g2t1st ?? '-') . " s/d " . ($spmb->g2t1en ?? '-');
+                if (!empty($spmb->g2t2nm))
+                    $jadwal[] = "{$spmb->g2t2nm}: " . ($spmb->g2t2st ?? '-') . " s/d " . ($spmb->g2t2en ?? '-');
+                if (!empty($spmb->g2t3nm))
+                    $jadwal[] = "{$spmb->g2t3nm}: " . ($spmb->g2t3st ?? '-') . " s/d " . ($spmb->g2t3en ?? '-');
+                if (!empty($spmb->g2t4nm))
+                    $jadwal[] = "{$spmb->g2t4nm}: " . ($spmb->g2t4st ?? '-') . " s/d " . ($spmb->g2t4en ?? '-');
+                if (!empty($spmb->g2t5nm))
+                    $jadwal[] = "{$spmb->g2t5nm}: " . ($spmb->g2t5st ?? '-') . " s/d " . ($spmb->g2t5en ?? '-');
 
                 if (!empty($jadwal)) {
                     $lines[] = "Jadwal Pendaftaran:\n  - " . implode("\n  - ", $jadwal);
@@ -254,8 +275,10 @@ ATURAN PENTING:
         try {
             $kepala = KepalaMadrasah::query()->orderBy('id')->first();
             if ($kepala) {
-                if (!empty($kepala->nama)) $lines[] = 'Kepala Madrasah: ' . trim((string) $kepala->nama);
-                if (!empty($kepala->sambutan)) $lines[] = 'Sambutan Kepala Madrasah: ' . strip_tags($kepala->sambutan);
+                if (!empty($kepala->nama))
+                    $lines[] = 'Kepala Madrasah: ' . trim((string) $kepala->nama);
+                if (!empty($kepala->sambutan))
+                    $lines[] = 'Sambutan Kepala Madrasah: ' . strip_tags($kepala->sambutan);
             }
         } catch (\Throwable) {
         }
@@ -263,9 +286,12 @@ ATURAN PENTING:
         try {
             $visiMisi = VisiMisiTujuan::query()->orderBy('id')->first();
             if ($visiMisi) {
-                if (!empty($visiMisi->visi)) $lines[] = 'Visi Sekolah: ' . strip_tags($visiMisi->visi);
-                if (!empty($visiMisi->misi)) $lines[] = 'Misi Sekolah: ' . strip_tags($visiMisi->misi);
-                if (!empty($visiMisi->tujuan)) $lines[] = 'Tujuan Sekolah: ' . strip_tags($visiMisi->tujuan);
+                if (!empty($visiMisi->visi))
+                    $lines[] = 'Visi Sekolah: ' . strip_tags($visiMisi->visi);
+                if (!empty($visiMisi->misi))
+                    $lines[] = 'Misi Sekolah: ' . strip_tags($visiMisi->misi);
+                if (!empty($visiMisi->tujuan))
+                    $lines[] = 'Tujuan Sekolah: ' . strip_tags($visiMisi->tujuan);
             }
         } catch (\Throwable) {
         }
@@ -273,8 +299,10 @@ ATURAN PENTING:
         try {
             $tentang = TentangSekolah::query()->orderBy('id')->first();
             if ($tentang) {
-                if (!empty($tentang->deskripsi)) $lines[] = 'Tentang Sekolah: ' . strip_tags($tentang->deskripsi);
-                if (!empty($tentang->sejarah)) $lines[] = 'Sejarah Sekolah: ' . strip_tags($tentang->sejarah);
+                if (!empty($tentang->deskripsi))
+                    $lines[] = 'Tentang Sekolah: ' . strip_tags($tentang->deskripsi);
+                if (!empty($tentang->sejarah))
+                    $lines[] = 'Sejarah Sekolah: ' . strip_tags($tentang->sejarah);
             }
         } catch (\Throwable) {
         }
@@ -283,11 +311,15 @@ ATURAN PENTING:
             $sosmed = MediaSosial::query()->orderBy('id')->first();
             if ($sosmed) {
                 $sosmedList = [];
-                if (!empty($sosmed->facebook)) $sosmedList[] = 'Facebook: ' . $sosmed->facebook;
-                if (!empty($sosmed->instagram)) $sosmedList[] = 'Instagram: ' . $sosmed->instagram;
-                if (!empty($sosmed->youtube)) $sosmedList[] = 'YouTube: ' . $sosmed->youtube;
-                if (!empty($sosmed->tiktok)) $sosmedList[] = 'TikTok: ' . $sosmed->tiktok;
-                
+                if (!empty($sosmed->facebook))
+                    $sosmedList[] = 'Facebook: ' . $sosmed->facebook;
+                if (!empty($sosmed->instagram))
+                    $sosmedList[] = 'Instagram: ' . $sosmed->instagram;
+                if (!empty($sosmed->youtube))
+                    $sosmedList[] = 'YouTube: ' . $sosmed->youtube;
+                if (!empty($sosmed->tiktok))
+                    $sosmedList[] = 'TikTok: ' . $sosmed->tiktok;
+
                 if (!empty($sosmedList)) {
                     $lines[] = 'Media Sosial: ' . implode(', ', $sosmedList);
                 }
@@ -389,7 +421,7 @@ ATURAN PENTING:
         try {
             $latestAgenda = Agenda::where('status', 'publish')->where('tanggal_selesai', '>=', now())->orderBy('tanggal_mulai', 'asc')->take(3)->get();
             if ($latestAgenda->isNotEmpty()) {
-                $agendaList = $latestAgenda->map(function($a) {
+                $agendaList = $latestAgenda->map(function ($a) {
                     $tglMulai = $a->tanggal_mulai ? $a->tanggal_mulai->format('d M Y') : '-';
                     $tglSelesai = $a->tanggal_selesai ? $a->tanggal_selesai->format('d M Y') : '';
                     $tanggal = $tglSelesai !== '' && $tglSelesai !== $tglMulai ? "{$tglMulai} s/d {$tglSelesai}" : $tglMulai;
@@ -407,8 +439,10 @@ ATURAN PENTING:
                     $ringkas = $ringkas !== '' ? (string) \Illuminate\Support\Str::limit((string) $ringkas, 200) : '';
 
                     $parts = [trim((string) $a->judul), "({$tanggal})"];
-                    if ($waktu !== '') $parts[] = $waktu;
-                    if ($lokasi !== '') $parts[] = 'Lokasi: ' . $lokasi;
+                    if ($waktu !== '')
+                        $parts[] = $waktu;
+                    if ($lokasi !== '')
+                        $parts[] = 'Lokasi: ' . $lokasi;
                     $text = implode(' ', $parts);
                     return $ringkas !== '' ? $text . ' - ' . $ringkas : $text;
                 })->toArray();
@@ -434,8 +468,10 @@ ATURAN PENTING:
                     $ringkas = $ringkas !== '' ? (string) \Illuminate\Support\Str::limit((string) $ringkas, 200) : '';
 
                     $base = trim((string) ($item->nama_lomba ?? ''));
-                    if ($namaSiswa !== '') $base .= " - {$namaSiswa}";
-                    if ($peringkat !== '') $base .= " - {$peringkat}";
+                    if ($namaSiswa !== '')
+                        $base .= " - {$namaSiswa}";
+                    if ($peringkat !== '')
+                        $base .= " - {$peringkat}";
                     $base .= " ({$tgl})";
 
                     return $ringkas !== '' ? $base . ' - ' . $ringkas : $base;
