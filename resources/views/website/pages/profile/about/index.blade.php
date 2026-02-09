@@ -15,17 +15,17 @@
                 </h2>
             </div>
 
-            <!-- Full Width Image -->
-            <div class="w-full mb-10">
+            <!-- Styled Photo Section -->
+            <div class="max-w-5xl mx-auto mb-12">
                 @if($tentangSekolah?->foto)
-                    <div class="relative overflow-hidden rounded-lg shadow-xl border border-gray-100">
+                    <div class="relative overflow-hidden rounded-2xl shadow-2xl border border-gray-100 bg-gray-50">
                         <img src="{{ asset('storage/' . $tentangSekolah->foto) }}" alt="Gedung Sekolah"
-                            class="w-full h-[300px] sm:h-[500px] object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                            class="w-full h-auto max-h-[750px] object-contain block mx-auto">
+                        <div class="absolute inset-0 pointer-events-none ring-1 ring-inset ring-black/5 rounded-2xl"></div>
                     </div>
                 @else
-                    <div class="py-20 flex items-center justify-center text-center">
-                        <p class="text-xs sm:text-base font-semibold text-slate-900 tracking-wider">Belum Ada Foto Sekolah</p>
+                    <div class="py-20 flex items-center justify-center text-center bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                        <p class="text-sm sm:text-lg font-medium text-slate-500 tracking-wider font-inter">Belum Ada Foto Gedung Sekolah</p>
                     </div>
                 @endif
             </div>
