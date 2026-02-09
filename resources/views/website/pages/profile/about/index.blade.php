@@ -19,9 +19,9 @@
             <div class="w-full mb-12">
                 @if($tentangSekolah?->foto)
                     <div
-                        class="relative w-full h-[300px] sm:h-[500px] overflow-hidden rounded-md border border-gray-200 bg-gray-50 flex items-center justify-center">
+                        class="relative w-full h-[300px] sm:h-[500px] overflow-hidden rounded-md border border-gray-200 bg-gray-50">
                         <img src="{{ asset('storage/' . $tentangSekolah->foto) }}" alt="Gedung Sekolah"
-                            class="max-w-full max-h-full object-contain">
+                            class="w-full h-full object-cover">
                     </div>
                 @else
                     <div
