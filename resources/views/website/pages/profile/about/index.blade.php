@@ -15,16 +15,19 @@
                 </h2>
             </div>
 
-            <!-- Landscape Photo Section (No Shadow, Small Radius, No Crop) -->
-            <div class="max-w-5xl mx-auto mb-12">
+            <!-- Landscape Photo Section (Full Width, No Shadow, Small Radius, No Crop) -->
+            <div class="w-full mb-12">
                 @if($tentangSekolah?->foto)
-                    <div class="relative w-full h-[250px] sm:h-[450px] overflow-hidden rounded-md border border-gray-200 bg-gray-50 flex items-center justify-center">
+                    <div
+                        class="relative w-full h-[300px] sm:h-[500px] overflow-hidden rounded-md border border-gray-200 bg-gray-50 flex items-center justify-center">
                         <img src="{{ asset('storage/' . $tentangSekolah->foto) }}" alt="Gedung Sekolah"
                             class="max-w-full max-h-full object-contain">
                     </div>
                 @else
-                    <div class="w-full h-[250px] sm:h-[450px] flex items-center justify-center text-center bg-gray-50 rounded-md border-2 border-dashed border-gray-200">
-                        <p class="text-sm sm:text-lg font-medium text-slate-500 tracking-wider font-inter">Belum Ada Foto Gedung Sekolah</p>
+                    <div
+                        class="w-full h-[300px] sm:h-[500px] flex items-center justify-center text-center bg-gray-50 rounded-md border-2 border-dashed border-gray-200">
+                        <p class="text-sm sm:text-lg font-medium text-slate-500 tracking-wider font-inter">Belum Ada Foto Gedung
+                            Sekolah</p>
                     </div>
                 @endif
             </div>
