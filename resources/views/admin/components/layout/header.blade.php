@@ -18,7 +18,25 @@
             {{-- TITLE HALAMAN (Dashboard, dll) --}}
             <div class="min-w-0 flex-1 sm:flex-initial">
                 <p class="text-sm sm:text-lg font-bold tracking-tight text-slate-900 truncate">
-                    @yield('title', 'Admin')
+                    @php
+                        $groupTitle = null;
+                        if (request()->routeIs('admin.profil.*')) {
+                            $groupTitle = 'Profil';
+                        } elseif (request()->routeIs('admin.konten.*')) {
+                            $groupTitle = 'Konten';
+                        } elseif (request()->routeIs('admin.media.*')) {
+                            $groupTitle = 'Media';
+                        } elseif (request()->routeIs('admin.interaksi.*')) {
+                            $groupTitle = 'Interaksi';
+                        } elseif (request()->routeIs('admin.pengaturan.*')) {
+                            $groupTitle = 'Pengaturan';
+                        }
+                    @endphp
+                    @if ($groupTitle)
+                        {{ $groupTitle }}
+                    @else
+                        @yield('title', 'Admin')
+                    @endif
                 </p>
             </div>
         </div>
