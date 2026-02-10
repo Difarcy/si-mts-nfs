@@ -1,5 +1,5 @@
 <!-- Footer -->
-<footer class="bg-green-700 text-white mt-auto">
+<footer class="bg-green-700 text-white mt-auto overflow-x-hidden">
     <div class="container mx-auto px-3 sm:px-4 lg:px-6 xl:px-8 max-w-7xl pt-8 sm:pt-12 pb-2">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <!-- Logo dan Nama Sekolah -->
@@ -8,7 +8,7 @@
                 $logoVersion = file_exists(public_path($logoPath)) ? filemtime(public_path($logoPath)) : null;
                 $namaSekolah = 'MTs Nurul Falaah Soreang';
             @endphp
-            <div>
+            <div class="min-w-0">
                 <div class="flex items-center gap-3 mb-4">
                     <a href="/" class="flex items-center gap-3 hover:opacity-90 transition-opacity">
                         <img src="{{ $websiteLogo }}"
@@ -20,7 +20,7 @@
                         </div>
                     </a>
                 </div>
-                                <p class="text-xs sm:text-sm text-gray-200 leading-relaxed mb-4 whitespace-pre-line max-w-[280px] break-words text-justify">{{ trim($kontak?->deskripsi ?: 'Belum ada') }}</p>
+                <p class="text-xs sm:text-sm text-gray-200 leading-relaxed mb-4 whitespace-pre-line break-words text-justify">{{ trim($kontak?->deskripsi ?: 'Belum ada') }}</p>
                 <div class="flex items-center gap-4">
                     @if(!empty($socialLinks['facebook']))
                         <a href="{{ $socialLinks['facebook'] }}" target="_blank" rel="noopener noreferrer" class="text-white transition-colors duration-300 hover:text-[#1877F2] transform hover:scale-110" aria-label="Facebook">
@@ -99,36 +99,36 @@
             </div>
 
             <!-- Menu Cepat -->
-            <div>
-                <h3 class="text-sm sm:text-xl font-bold mb-4">Menu Cepat</h3>
+            <div class="min-w-0">
+                <h3 class="text-xs sm:text-sm font-bold mb-4">Menu Cepat</h3>
                 <ul class="space-y-2">
                     <li>
                         <a href="{{ route('web.home') }}"
-                            class="inline-block text-xs sm:text-sm md:text-base text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent">
+                            class="inline-block max-w-full text-xs sm:text-sm text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent break-words">
                             Beranda
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('web.about') }}"
-                            class="inline-block text-xs sm:text-sm md:text-base text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent">
+                            class="inline-block max-w-full text-xs sm:text-sm text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent break-words">
                             Tentang Sekolah
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('web.news') }}"
-                            class="inline-block text-xs sm:text-sm md:text-base text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent">
+                            class="inline-block max-w-full text-xs sm:text-sm text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent break-words">
                             Berita Terbaru
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('web.announcement') }}"
-                            class="inline-block text-xs sm:text-sm md:text-base text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent">
+                            class="inline-block max-w-full text-xs sm:text-sm text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent break-words">
                             Pengumuman
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('web.contact') }}"
-                            class="inline-block text-xs sm:text-sm md:text-base text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent">
+                            class="inline-block max-w-full text-xs sm:text-sm text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent break-words">
                             Hubungi Kami
                         </a>
                     </li>
@@ -136,54 +136,48 @@
             </div>
 
             <!-- Layanan Publik -->
-            <div>
-                <h3 class="text-sm sm:text-xl font-bold mb-4">Layanan Publik</h3>
+            <div class="min-w-0">
+                <h3 class="text-xs sm:text-sm font-bold mb-4">Layanan Publik</h3>
                 <ul class="space-y-2">
                     <li>
                         <a href="/news"
-                            class="inline-block text-xs sm:text-sm md:text-base text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent">
+                            class="inline-block max-w-full text-xs sm:text-sm text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent break-words">
                             Berita
                         </a>
                     </li>
                     <li>
                         <a href="/article"
-                            class="inline-block text-xs sm:text-sm md:text-base text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent">
+                            class="inline-block max-w-full text-xs sm:text-sm text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent break-words">
                             Artikel
                         </a>
                     </li>
                     <li>
                         <a href="/announcement"
-                            class="inline-block text-xs sm:text-sm md:text-base text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent">
+                            class="inline-block max-w-full text-xs sm:text-sm text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent break-words">
                             Pengumuman
                         </a>
                     </li>
                     <li>
                         <a href="/agenda"
-                            class="inline-block text-xs sm:text-sm md:text-base text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent">
+                            class="inline-block max-w-full text-xs sm:text-sm text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent break-words">
                             Agenda
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('web.spmb') }}"
-                            class="inline-block text-xs sm:text-sm md:text-base text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent">
+                            class="inline-block max-w-full text-xs sm:text-sm text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent break-words">
                             SPMB/PPDB
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/contact"
-                            class="inline-block text-xs sm:text-sm md:text-base text-gray-200 hover:text-white transition-all duration-200 pb-1 hover:border-b-2 hover:border-white border-b-2 border-transparent">
-                            Kontak
                         </a>
                     </li>
                 </ul>
             </div>
 
             <!-- Kontak -->
-            <div>
-                <h3 class="text-sm sm:text-xl font-bold mb-4">Kontak</h3>
+            <div class="min-w-0">
+                <h3 class="text-xs sm:text-sm font-bold mb-4">Kontak</h3>
 
                 <!-- Footer Search -->
-                <div id="footer-search-container" class="relative mb-4">
+                <div id="footer-search-container" class="relative mb-4 max-w-full">
                     <form action="{{ route('web.search') }}" method="GET" class="relative">
                         <input type="text" id="footer-search-input" name="q" placeholder="Cari ..."
                             class="w-full px-3 py-1.5 text-xs sm:text-sm text-gray-900 bg-white border border-gray-300 focus:outline-none focus:border-green-500 rounded-none placeholder-gray-500"
@@ -192,7 +186,7 @@
                 </div>
 
                 <ul class="space-y-3">
-                    <li class="flex items-start gap-2">
+                    <li class="flex items-start gap-2 min-w-0">
                         <div class="h-6 w-5 sm:w-6 flex items-center justify-center shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 scale-75" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                 <path d="M20.52 3.48A11.9 11.9 0 0 0 12.04 0C5.43 0 0 5.43 0 12.04c0 2.12.55 4.2 1.6 6.03L0 24l6.13-1.6a11.95 11.95 0 0 0 5.91 1.5h.01C18.67 23.9 24 18.57 24 11.96c0-3.2-1.24-6.2-3.48-8.48zM12.05 21.7h-.01a9.9 9.9 0 0 1-5.05-1.38l-.36-.21-3.64.95.97-3.55-.23-.37A9.9 9.9 0 1 1 12.05 21.7zm5.76-7.38c-.31-.15-1.82-.9-2.1-1-.28-.1-.48-.15-.68.15-.2.3-.78 1-.95 1.2-.17.2-.35.22-.66.07-.31-.15-1.3-.48-2.48-1.53-.92-.82-1.54-1.83-1.72-2.14-.18-.31-.02-.48.13-.63.14-.14.31-.35.46-.53.15-.18.2-.31.31-.51.1-.2.05-.38-.03-.53-.08-.15-.68-1.64-.93-2.25-.24-.58-.49-.5-.68-.51h-.58c-.2 0-.53.08-.8.38-.27.3-1.06 1.03-1.06 2.5 0 1.47 1.09 2.9 1.24 3.1.15.2 2.14 3.27 5.18 4.58.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.09 1.82-.74 2.08-1.46.26-.72.26-1.34.18-1.46-.08-.12-.28-.2-.58-.35z"/>
@@ -205,14 +199,14 @@
                                     $waNumber = '62' . substr($waNumber, 1);
                                 }
                             @endphp
-                            <a href="https://wa.me/{{ $waNumber }}" target="_blank" rel="noopener noreferrer" class="inline-block text-xs sm:text-sm md:text-base text-gray-200 hover:text-white transition-colors leading-relaxed">
+                            <a href="https://wa.me/{{ $waNumber }}" target="_blank" rel="noopener noreferrer" class="inline-block min-w-0 text-xs sm:text-sm text-gray-200 hover:text-white transition-colors leading-relaxed break-words">
                                 {{ $kontak->whatsapp }}
                             </a>
                         @else
-                            <span class="inline-block text-xs sm:text-sm md:text-base text-gray-200 leading-relaxed">Belum ada</span>
+                            <span class="inline-block min-w-0 text-xs sm:text-sm text-gray-200 leading-relaxed break-words">Belum ada</span>
                         @endif
                     </li>
-                    <li class="flex items-start gap-2">
+                    <li class="flex items-start gap-2 min-w-0">
                         <div class="h-6 w-5 sm:w-6 flex items-center justify-center shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 scale-90"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -223,12 +217,12 @@
                             </svg>
                         </div>
                         @if($kontak?->alamat)
-                            <span class="inline-block text-xs sm:text-sm md:text-base text-gray-200 leading-relaxed">{{ trim($kontak->alamat) }}</span>
+                            <span class="inline-block min-w-0 text-xs sm:text-sm text-gray-200 leading-relaxed break-words">{{ trim($kontak->alamat) }}</span>
                         @else
-                            <span class="inline-block text-xs sm:text-sm md:text-base text-gray-200 leading-relaxed">Belum ada</span>
+                            <span class="inline-block min-w-0 text-xs sm:text-sm text-gray-200 leading-relaxed break-words">Belum ada</span>
                         @endif
                     </li>
-                    <li class="flex items-start gap-2">
+                    <li class="flex items-start gap-2 min-w-0">
                         <div class="h-6 w-5 sm:w-6 flex items-center justify-center shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 scale-90"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -237,14 +231,14 @@
                             </svg>
                         </div>
                         @if($kontak?->telepon)
-                            <a href="tel:{{ preg_replace('/[^0-9+]/', '', $kontak->telepon) }}" class="inline-block text-xs sm:text-sm md:text-base text-gray-200 hover:text-white transition-colors leading-relaxed">
+                            <a href="tel:{{ preg_replace('/[^0-9+]/', '', $kontak->telepon) }}" class="inline-block min-w-0 text-xs sm:text-sm text-gray-200 hover:text-white transition-colors leading-relaxed break-words">
                                 {{ $kontak->telepon }}
                             </a>
                         @else
-                            <span class="inline-block text-xs sm:text-sm md:text-base text-gray-200 leading-relaxed">Belum ada</span>
+                            <span class="inline-block min-w-0 text-xs sm:text-sm text-gray-200 leading-relaxed break-words">Belum ada</span>
                         @endif
                     </li>
-                    <li class="flex items-start gap-2">
+                    <li class="flex items-start gap-2 min-w-0">
                         <div class="h-6 w-5 sm:w-6 flex items-center justify-center shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 scale-90"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -253,11 +247,11 @@
                             </svg>
                         </div>
                         @if($kontak?->email)
-                            <a href="mailto:{{ $kontak->email }}" class="inline-block text-xs sm:text-sm md:text-base text-gray-200 hover:text-white transition-colors leading-relaxed">
+                            <a href="mailto:{{ $kontak->email }}" class="inline-block min-w-0 text-xs sm:text-sm text-gray-200 hover:text-white transition-colors leading-relaxed break-words">
                                 {{ $kontak->email }}
                             </a>
                         @else
-                            <span class="inline-block text-xs sm:text-sm md:text-base text-gray-200 leading-relaxed">Belum ada</span>
+                            <span class="inline-block min-w-0 text-xs sm:text-sm text-gray-200 leading-relaxed break-words">Belum ada</span>
                         @endif
                     </li>
                 </ul>
