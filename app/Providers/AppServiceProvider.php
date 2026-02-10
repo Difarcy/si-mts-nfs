@@ -62,8 +62,11 @@ class AppServiceProvider extends ServiceProvider
             }
 
             try {
+                $widgetTtl = 300;
+                $widgetCacheVersion = 'v2';
+                $widgetCacheKey = fn (string $name) => $name . '.' . $widgetCacheVersion;
                 // Latest News (cached for 60 minutes)
-                $view->with('latestNewsWidget', Cache::remember('widget.latest_news', 3600, function () {
+                $view->with('latestNewsWidget', Cache::remember($widgetCacheKey('widget.latest_news'), $widgetTtl, function () {
                     return \App\Models\Berita::where('status', 'publish')
                         ->where(function ($query) {
                             $query->whereNull('tanggal_publikasi')
@@ -76,7 +79,7 @@ class AppServiceProvider extends ServiceProvider
                 }));
 
                 // Latest Articles (cached for 60 minutes)
-                $view->with('latestArticlesWidget', Cache::remember('widget.latest_articles', 3600, function () {
+                $view->with('latestArticlesWidget', Cache::remember($widgetCacheKey('widget.latest_articles'), $widgetTtl, function () {
                     return \App\Models\Artikel::where('status', 'publish')
                         ->where(function ($query) {
                             $query->whereNull('tanggal_publikasi')
@@ -89,7 +92,7 @@ class AppServiceProvider extends ServiceProvider
                 }));
 
                 // Latest Announcements (infoTerkini) (cached for 60 minutes)
-                $view->with('infoTerkiniWidget', Cache::remember('widget.latest_announcements', 3600, function () {
+                $view->with('infoTerkiniWidget', Cache::remember($widgetCacheKey('widget.latest_announcements'), $widgetTtl, function () {
                     return \App\Models\Pengumuman::where('status', 'publish')
                         ->where(function ($query) {
                             $query->whereNull('tanggal_publikasi')
@@ -102,7 +105,7 @@ class AppServiceProvider extends ServiceProvider
                 }));
 
                 // Latest Agendas (agendaTerbaru) (cached for 60 minutes)
-                $view->with('agendaTerbaruWidget', Cache::remember('widget.latest_agendas', 3600, function () {
+                $view->with('agendaTerbaruWidget', Cache::remember($widgetCacheKey('widget.latest_agendas'), $widgetTtl, function () {
                     return \App\Models\Agenda::where('status', 'publish')
                         ->where(function ($query) {
                             $query->whereNull('tanggal_publikasi')

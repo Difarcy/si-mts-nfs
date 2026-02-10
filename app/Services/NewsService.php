@@ -439,6 +439,7 @@ class NewsService
 
         // Clear widget cache
         Cache::forget('widget.latest_news');
+        Cache::forget('widget.latest_news.v2');
     }
 
     /**
